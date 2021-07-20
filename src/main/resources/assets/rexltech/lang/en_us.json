@@ -1,0 +1,17 @@
+{
+  "itemGroup.rexltech_machines": "RexlTech Machines",
+  "itemGroup.rexltech_resources": "RexlTech Resources",
+  "item.rexltech.copper_ingot": "Copper Ingot",
+  "item.rexltech.copper_nugget": "Copper Nugget",
+  "block.rexltech.copper_block": "Block of Copper",
+  "tile.rexltech.copper_block": "Block of Copper",
+  "tile.rexltech.copper_ore": "Copper Ore",
+  "block.rexltech.copper_ore": "Copper Ore",
+  "tile.rexltech.basic_energy_cell": "Energy Cell (Basic)",
+  "block.rexltech.basic_energy_cell": "Energy Cell (Basic)",
+  "item.rexltech.wrench": "Wrench",
+  "item.rexltech.drill": "Drill",
+  "block.rexltech.coal_generator": "Coal Generator",
+  "tile.rexltech.coal_generator": "Coal Generator",
+  "screen.rexltech.coal_generator": "Coal Generator"
+}

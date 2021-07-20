@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "rexltech:block/basic_energy_cell" },
+    "facing=south": { "model": "rexltech:block/basic_energy_cell", "y": 180 },
+    "facing=west": { "model": "rexltech:block/basic_energy_cell", "y": 270 },
+    "facing=east": { "model": "rexltech:block/basic_energy_cell", "y": 90 }
+  }
+}

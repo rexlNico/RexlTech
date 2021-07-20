@@ -1,0 +1,12 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "particle": "rexltech:blocks/coal_generator_side",
+    "up": "rexltech:blocks/coal_generator_top",
+    "down": "rexltech:blocks/coal_generator_bottom",
+    "north": "rexltech:blocks/coal_generator_front",
+    "east": "rexltech:blocks/coal_generator_side",
+    "south": "rexltech:blocks/coal_generator_side",
+    "west": "rexltech:blocks/coal_generator_side"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "particle": "rexltech:blocks/basic_energy_cell_top",
+    "up": "rexltech:blocks/basic_energy_cell_top",
+    "down": "rexltech:blocks/basic_energy_cell_bottom",
+    "north": "rexltech:blocks/basic_energy_cell_front",
+    "east": "rexltech:blocks/basic_energy_cell_side",
+    "south": "rexltech:blocks/basic_energy_cell_side",
+    "west": "rexltech:blocks/basic_energy_cell_side"
+  }
+}
