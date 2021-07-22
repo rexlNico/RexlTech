@@ -50,9 +50,7 @@ public abstract class EnergyItem extends Item {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        StringTextComponent textComponent = new StringTextComponent(getEnergyStored(stack) + " FE / " + energyCapacity + " FE");
-        textComponent.setStyle(Style.EMPTY.setColor(Color.fromHex("#cc0099")));
-        tooltip.add(textComponent);
+        tooltip.add(getEnergyText(stack));
         super.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
@@ -96,6 +94,7 @@ public abstract class EnergyItem extends Item {
         items.add(charged);
     }
 
+
     @Override
     public int getRGBDurabilityForDisplay(ItemStack stack) {
         PlayerEntity player = Minecraft.getInstance().player;
@@ -104,6 +103,16 @@ public abstract class EnergyItem extends Item {
             return MathHelper.rgb(color[0] / 255F, color[1] / 255F, color[2] / 255F);
         }
         return super.getRGBDurabilityForDisplay(stack);
+    }
+
+    public StringTextComponent getEnergyText(ItemStack stack) {
+        StringTextComponent textComponent = new StringTextComponent(getEnergyShort(getEnergyStored(stack)) + " FE / " + getEnergyShort(energyCapacity) + " FE");
+        textComponent.setStyle(Style.EMPTY.setColor(Color.fromHex("#cc0099")));
+        return textComponent;
+    }
+
+    public String getEnergyShort(int energy) {
+        return Integer.toString(energy);
     }
 
 }

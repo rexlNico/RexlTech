@@ -1,0 +1,11 @@
+Multiblock mining drill (uses energy) (outputs ores) (upgradable)  (silktouch upgrade) (fortune upgrade)
+Machine Upgrades +gui  can be disabled
+speed Upgrades
+energy efficiency upgrades
+
+crusher (doubles ores)
+industrial crusher (multiblock) (triples ores) (can crsuh up to 3 items parallel)
+smelter (furnace)
+industrial smelter (multiblock) (can smelt up to 3 items parallel)
+
+(ore quadrupling mechanism) with (sulfuric acid (fluid))

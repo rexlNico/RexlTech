@@ -16,7 +16,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod("rexltech")
+@Mod(RexlTech.MODID)
 public class RexlTech {
 
     public static final Logger LOGGER = LogManager.getLogger();
@@ -30,6 +30,7 @@ public class RexlTech {
         ItemInit.ITEMS.register(bus);
         TileEntityInit.TILE_ENTITIES.register(bus);
         ContainerInit.CONTAINERS.register(bus);
+        RecipeInit.RECIPE_SERIALIZER.register(bus);
 
         bus.addListener(ClientSetup::init);
 

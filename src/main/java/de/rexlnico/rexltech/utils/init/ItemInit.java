@@ -3,6 +3,7 @@ package de.rexlnico.rexltech.utils.init;
 import de.rexlnico.rexltech.RexlTech;
 import de.rexlnico.rexltech.item.BaseEnergyCellBlockItem;
 import de.rexlnico.rexltech.item.Drill;
+import de.rexlnico.rexltech.item.Magnet;
 import de.rexlnico.rexltech.item.Wrench;
 import de.rexlnico.rexltech.itemgroup.MachineGroup;
 import de.rexlnico.rexltech.itemgroup.ResourcesGroup;
@@ -18,6 +19,7 @@ public class ItemInit {
     public static final RegistryObject<Item> COPPER_INGOT = ITEMS.register("copper_ingot", () -> new Item(new Item.Properties().group(ResourcesGroup.RESOURCES_GROUP)));
     public static final RegistryObject<Item> COPPER_NUGGET = ITEMS.register("copper_nugget", () -> new Item(new Item.Properties().group(ResourcesGroup.RESOURCES_GROUP)));
     public static final RegistryObject<Item> DRILL = ITEMS.register("drill", Drill::new);
+    public static final RegistryObject<Item> MAGNET = ITEMS.register("magnet", Magnet::new);
     public static final RegistryObject<BlockItem> COPPER_BLOCK = ITEMS.register("copper_block", () -> new BlockItem(BlockInit.COPPER_BLOCK.get(), new Item.Properties().group(ResourcesGroup.RESOURCES_GROUP)));
     public static final RegistryObject<BlockItem> COPPER_ORE = ITEMS.register("copper_ore", () -> new BlockItem(BlockInit.COPPER_ORE.get(), new Item.Properties().group(ResourcesGroup.RESOURCES_GROUP)));
 

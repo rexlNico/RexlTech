@@ -4,8 +4,6 @@ import de.rexlnico.rexltech.utils.WorldUtil;
 import de.rexlnico.rexltech.utils.item.EnergyItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -47,18 +45,18 @@ public class Drill extends EnergyItem {
         return energyCostPerBlock;
     }
 
-    @Override
-    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        if(enchantment.type == EnchantmentType.VANISHABLE){
-            return true;
-        }
-        return false;
-    }
-
 //    @Override
-//    public boolean isEnchantable(ItemStack stack) {
+//    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+//        if(enchantment.type == EnchantmentType.VANISHABLE){
+//            return true;
+//        }
 //        return false;
 //    }
+
+    @Override
+    public boolean isEnchantable(ItemStack stack) {
+        return false;
+    }
 
 
     private boolean breakBlocks(ItemStack stack, int radius, World world, BlockPos aPos, Direction side, PlayerEntity player) {
