@@ -12,14 +12,7 @@ public class RecipeInit {
 
     public static final DeferredRegister<IRecipeSerializer<?>> RECIPE_SERIALIZER = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, RexlTech.MODID);
 
-    public static class Types {
-        public static final IRecipeType<CrusherRecipe> CRUSHING = IRecipeType.register(RexlTech.MODID + "crushing");
-    }
-
-    public static class Serializers {
-
-        public static final RegistryObject<IRecipeSerializer<?>> CRUSHING = RECIPE_SERIALIZER.register("crushing", CrusherRecipe.Serializer::new);
-
-    }
+    public static final IRecipeType<CrusherRecipe> CRUSHING_TYPE = IRecipeType.register(RexlTech.MODID + "crushing");
+    public static final RegistryObject<IRecipeSerializer<?>> CRUSHING_SERIALIZER = RECIPE_SERIALIZER.register("crushing", CrusherRecipe.Serializer::new);
 
 }

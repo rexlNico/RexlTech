@@ -1,8 +1,13 @@
 {
   "itemGroup.rexltech_machines": "RexlTech Machines",
   "itemGroup.rexltech_resources": "RexlTech Resources",
+  "itemGroup.rexltech_upgrades": "RexlTech Upgrades",
   "item.rexltech.copper_ingot": "Copper Ingot",
   "item.rexltech.copper_nugget": "Copper Nugget",
+  "item.rexltech.copper_dust": "Copper Dust",
+  "item.rexltech.iron_dust": "Iron Dust",
+  "item.rexltech.gold_dust": "Gold Dust",
+  "item.rexltech.netherite_dust": "Netherite Dust",
   "block.rexltech.copper_block": "Block of Copper",
   "tile.rexltech.copper_block": "Block of Copper",
   "tile.rexltech.copper_ore": "Copper Ore",
@@ -12,7 +17,16 @@
   "item.rexltech.wrench": "Wrench",
   "item.rexltech.drill": "Drill",
   "item.rexltech.magnet": "Magnet",
+  "item.rexltech.speed_upgrade": "Speed Upgrade",
+  "item.rexltech.energy_production_upgrade": "Energy Production Upgrade",
+  "item.rexltech.creative_energy_upgrade": "Creative Energy Upgrade",
   "block.rexltech.coal_generator": "Coal Generator",
   "tile.rexltech.coal_generator": "Coal Generator",
-  "screen.rexltech.coal_generator": "Coal Generator"
+  "screen.rexltech.coal_generator": "Coal Generator",
+  "block.rexltech.crusher": "Crusher",
+  "tile.rexltech.crusher": "Crusher",
+  "screen.rexltech.crusher": "Crusher",
+  "description.energy_production_upgrade": "Increases the power produced and the fuel usage",
+  "description.speed_upgrade": "Increases the speed and the energy usage",
+  "description.creative_energy_upgrade": "Removes the power usage"
 }

@@ -1,0 +1,9 @@
+{
+  "type": "rexltech:crushing",
+  "ingredient": {
+    "item": "rexltech:copper_ingot"
+  },
+  "result": "rexltech:copper_dust",
+  "count": 1,
+  "processTime": 200
+}

@@ -1,0 +1,9 @@
+{
+  "type": "rexltech:crushing",
+  "ingredient": {
+    "item": "minecraft:iron_ore"
+  },
+  "result": "rexltech:iron_dust",
+  "count": 2,
+  "processTime": 200
+}

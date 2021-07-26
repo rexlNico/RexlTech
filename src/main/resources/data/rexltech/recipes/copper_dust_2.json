@@ -1,0 +1,9 @@
+{
+  "type": "rexltech:crushing",
+  "ingredient": {
+    "item": "rexltech:copper_ore"
+  },
+  "result": "rexltech:copper_dust",
+  "count": 2,
+  "processTime": 200
+}

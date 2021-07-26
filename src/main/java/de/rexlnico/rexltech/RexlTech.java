@@ -28,9 +28,9 @@ public class RexlTech {
 
         BlockInit.BLOCKS.register(bus);
         ItemInit.ITEMS.register(bus);
-        TileEntityInit.TILE_ENTITIES.register(bus);
         ContainerInit.CONTAINERS.register(bus);
         RecipeInit.RECIPE_SERIALIZER.register(bus);
+        TileEntityInit.TILE_ENTITIES.register(bus);
 
         bus.addListener(ClientSetup::init);
 

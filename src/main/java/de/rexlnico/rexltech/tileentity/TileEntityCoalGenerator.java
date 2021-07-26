@@ -2,6 +2,7 @@ package de.rexlnico.rexltech.tileentity;
 
 import de.rexlnico.rexltech.block.CoalGenerator;
 import de.rexlnico.rexltech.config.RexlTechGeneratorConfig;
+import de.rexlnico.rexltech.utils.init.ItemInit;
 import de.rexlnico.rexltech.utils.init.TileEntityInit;
 import de.rexlnico.rexltech.utils.tileentity.SideConfiguration;
 import net.minecraft.block.BlockState;
@@ -12,6 +13,8 @@ import net.minecraft.tileentity.AbstractFurnaceTileEntity;
 import net.minecraftforge.common.ForgeHooks;
 
 public class TileEntityCoalGenerator extends BaseTileEntityMachineBlock {
+
+    public static final int baseProduction = RexlTechGeneratorConfig.coal_generator_production.get();
 
     public TileEntityCoalGenerator() {
         super(TileEntityInit.COAL_GENERATOR_TILE_ENTITY.get(), 1, new Integer[]{0}, new Integer[]{}, new SideConfiguration[]{SideConfiguration.INPUT}, RexlTechGeneratorConfig.coal_generator_storage.get(), 0, RexlTechGeneratorConfig.coal_generator_output.get());
@@ -28,16 +31,16 @@ public class TileEntityCoalGenerator extends BaseTileEntityMachineBlock {
     @Override
     public void onTick() {
         if (burntime > 0) {
-            int added = energyStorage.addEnergy(RexlTechGeneratorConfig.coal_generator_production.get(), true);
-            if (added == RexlTechGeneratorConfig.coal_generator_production.get()) {
-                burntime--;
-                energyStorage.addEnergy(RexlTechGeneratorConfig.coal_generator_production.get(), false);
+            int production = getEnergy(baseProduction);
+            int added = energyStorage.addEnergy(production, true);
+            if (added == production) {
+                burntime = burntime - getTicks(1);
+                energyStorage.addEnergy(production, false);
             }
         }
         if (burntime <= 0) {
             if (!handler.getStackInSlot(0).isEmpty()) {
                 ItemStack itemStack = handler.getStackInSlot(0);
-                System.out.println(itemStack.getBurnTime());
                 if (ForgeHooks.getBurnTime(itemStack) > 0 && itemStack.getItem().getRegistryName().toString().contains("coal")) {
                     maxBurntime = ForgeHooks.getBurnTime(itemStack);
                     burntime = maxBurntime;
@@ -52,6 +55,11 @@ public class TileEntityCoalGenerator extends BaseTileEntityMachineBlock {
     }
 
     @Override
+    public Item[] getAllowedAddons() {
+        return new Item[]{ItemInit.ENERGY_PRODUCTION_UPGRADE.get()};
+    }
+
+    @Override
     public CompoundNBT write(CompoundNBT compound) {
         compound.putInt("burn_time", burntime);
         compound.putInt("max_burn_time", maxBurntime);
@@ -63,6 +71,12 @@ public class TileEntityCoalGenerator extends BaseTileEntityMachineBlock {
         burntime = nbt.getInt("burn_time");
         maxBurntime = nbt.getInt("max_burn_time");
         super.read(state, nbt);
+    }
+
+    @Override
+    public int getLightValue() {
+        BlockState blockState = world.getBlockState(pos);
+        return blockState.get(CoalGenerator.BURNING) ? 7 : 0;
     }
 
 }

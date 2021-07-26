@@ -1,0 +1,9 @@
+{
+  "type": "rexltech:crushing",
+  "ingredient": {
+    "item": "minecraft:gold_ore"
+  },
+  "result": "rexltech:gold_dust",
+  "count": 2,
+  "processTime": 200
+}

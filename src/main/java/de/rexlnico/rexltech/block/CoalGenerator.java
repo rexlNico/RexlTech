@@ -1,6 +1,7 @@
 package de.rexlnico.rexltech.block;
 
 import de.rexlnico.rexltech.container.CoalGeneratorContainer;
+import de.rexlnico.rexltech.tileentity.BaseTileEntityMachineBlock;
 import de.rexlnico.rexltech.tileentity.TileEntityCoalGenerator;
 import de.rexlnico.rexltech.utils.init.ItemInit;
 import net.minecraft.block.AbstractBlock;
@@ -42,6 +43,11 @@ public class CoalGenerator extends BaseMachineBlock {
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
         return new TileEntityCoalGenerator();
+    }
+
+    @Override
+    public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) {
+        return world.getTileEntity(pos) != null ? ((BaseTileEntityMachineBlock) world.getTileEntity(pos)).getLightValue() : 0;
     }
 
     @Override

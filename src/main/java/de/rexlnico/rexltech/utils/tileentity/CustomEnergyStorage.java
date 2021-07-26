@@ -34,6 +34,16 @@ public class CustomEnergyStorage extends EnergyStorage {
         return tag;
     }
 
+    public int extractEnergyInternal(int maxExtract, boolean simulate) {
+        int before = this.maxExtract;
+        this.maxExtract = Integer.MAX_VALUE;
+
+        int toReturn = this.extractEnergy(maxExtract, simulate);
+
+        this.maxExtract = before;
+        return toReturn;
+    }
+
     public void deserializeNBT(CompoundNBT nbt)
     {
         capacity = nbt.getInt("capacity");

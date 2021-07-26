@@ -1,0 +1,9 @@
+{
+  "type": "rexltech:crushing",
+  "ingredient": {
+    "item": "minecraft:nether_gold_ore"
+  },
+  "result": "rexltech:gold_dust",
+  "count": 1,
+  "processTime": 180
+}

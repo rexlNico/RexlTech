@@ -1,0 +1,9 @@
+{
+  "type": "rexltech:crushing",
+  "ingredient": {
+    "item": "minecraft:netherite_ingot"
+  },
+  "result": "rexltech:netherite_dust",
+  "count": 1,
+  "processTime": 300
+}

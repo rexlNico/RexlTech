@@ -3,9 +3,11 @@ package de.rexlnico.rexltech.container;
 import de.rexlnico.rexltech.tileentity.TileEntityCoalGenerator;
 import de.rexlnico.rexltech.utils.container.BasicMachineContainer;
 import de.rexlnico.rexltech.utils.container.CoalGeneratorSlotItemHandler;
+import de.rexlnico.rexltech.utils.init.BlockInit;
 import de.rexlnico.rexltech.utils.init.ContainerInit;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.IntReferenceHolder;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -73,6 +75,11 @@ public class CoalGeneratorContainer extends BasicMachineContainer {
                 tile.maxBurntime = energyStored + (value << 16);
             }
         });
+    }
+
+    @Override
+    public boolean canInteractWith(PlayerEntity playerIn) {
+        return isWithinUsableDistance(IWorldPosCallable.of(tileEntity.getWorld(), tileEntity.getPos()), playerEntity, BlockInit.COAL_GENERATOR.get());
     }
 
     public TileEntityCoalGenerator getTileEntity(){

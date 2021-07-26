@@ -2,6 +2,7 @@ package de.rexlnico.rexltech.utils.init;
 
 import de.rexlnico.rexltech.RexlTech;
 import de.rexlnico.rexltech.container.CoalGeneratorContainer;
+import de.rexlnico.rexltech.container.CrusherContainer;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -18,6 +19,12 @@ public class ContainerInit {
         BlockPos pos = data.readBlockPos();
         World world = inv.player.getEntityWorld();
         return new CoalGeneratorContainer(windowId, world, pos, inv, inv.player);
+    })));
+
+    public static final RegistryObject<ContainerType<CrusherContainer>> CRUSHER_CONTAINER = CONTAINERS.register("crusher", () -> IForgeContainerType.create(((windowId, inv, data) ->{
+        BlockPos pos = data.readBlockPos();
+        World world = inv.player.getEntityWorld();
+        return new CrusherContainer(windowId, world, pos, inv, inv.player);
     })));
 
 }

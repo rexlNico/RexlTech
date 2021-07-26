@@ -1,0 +1,12 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "particle": "rexltech:blocks/crusher_top",
+    "up": "rexltech:blocks/crusher_top",
+    "down": "rexltech:blocks/crusher_bottom",
+    "north": "rexltech:blocks/crusher_front_on",
+    "east": "rexltech:blocks/crusher_side",
+    "south": "rexltech:blocks/crusher_side",
+    "west": "rexltech:blocks/crusher_side"
+  }
+}

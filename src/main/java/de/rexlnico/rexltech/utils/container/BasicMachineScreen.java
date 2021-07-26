@@ -25,7 +25,8 @@ import java.util.List;
 public abstract class BasicMachineScreen<T extends BasicMachineContainer> extends ContainerScreen<T> {
 
     private final ResourceLocation CONFIG = new ResourceLocation(RexlTech.MODID, "textures/gui/configuration_gui.png");
-    public ResourceLocation GUI;
+    private final ResourceLocation ADDONS = new ResourceLocation(RexlTech.MODID, "textures/gui/addon_gui.png");
+    public final ResourceLocation GUI;
     private static final List<PlayerEntity> isConfigOpen = new ArrayList<>();
     private static final int sideOffset = 4;
     private static final int offset = 20;
@@ -67,6 +68,9 @@ public abstract class BasicMachineScreen<T extends BasicMachineContainer> extend
         this.blit(matrixStack, relX, relY, 0, 0, this.xSize, this.ySize);
         int energy = getEnergyStoredScaled(58);
         this.blit(matrixStack, relX + 153 + xEnergyOffset, relY + 74 - energy + yEnergyOffset, 176, 58 + 14 - energy, 14, energy);
+
+        this.minecraft.getTextureManager().bindTexture(ADDONS);
+        this.blit(matrixStack, relX - 31, relY, 0, 0, 31, 93);
 
         this.minecraft.getTextureManager().bindTexture(CONFIG);
         if (isConfigOpen.contains(playerInventory.player)) {
@@ -260,6 +264,12 @@ public abstract class BasicMachineScreen<T extends BasicMachineContainer> extend
         int i = burntime;
         int j = maxBurntime;
         return i != 0 && j != 0 ? i * pixels / j : 0;
+    }
+
+    public int getProgressScaled(int pixels, int burntime, int maxBurntime) {
+        int i = burntime;
+        int j = maxBurntime;
+        return i != 0 && j != 0 ? i * pixels / j : pixels;
     }
 
 }

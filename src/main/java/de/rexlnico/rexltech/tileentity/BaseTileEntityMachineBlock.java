@@ -1,10 +1,12 @@
 package de.rexlnico.rexltech.tileentity;
 
 import de.rexlnico.rexltech.block.BaseMachineBlock;
+import de.rexlnico.rexltech.item.BaseUpgradeItem;
 import de.rexlnico.rexltech.utils.tileentity.CustomEnergyStorage;
 import de.rexlnico.rexltech.utils.tileentity.CustomItemStackHandler;
 import de.rexlnico.rexltech.utils.tileentity.SideConfiguration;
 import net.minecraft.block.BlockState;
+import net.minecraft.item.Item;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -19,8 +21,10 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class BaseTileEntityMachineBlock extends TileEntity implements ITickableTileEntity {
@@ -32,22 +36,25 @@ public abstract class BaseTileEntityMachineBlock extends TileEntity implements I
     private LazyOptional<ItemStackHandler> sidedLazyOptional = LazyOptional.of(() -> handler);
     private LazyOptional<ItemStackHandler> lazyOptional = LazyOptional.of(() -> handler.itemStackHandler);
     private LazyOptional<IEnergyStorage> energyLazyOptional = LazyOptional.of(() -> energyStorage);
+    public boolean addons = true;
 
     public BaseTileEntityMachineBlock(TileEntityType<?> tileEntityTypeIn, int slots, Integer[] inputs, Integer[] outputs, SideConfiguration[] allowedSideConfigs, int energyStorage, int energyIn, int energyOut) {
         super(tileEntityTypeIn);
-        handler = new CustomItemStackHandler(this, slots, inputs, outputs);
+        handler = new CustomItemStackHandler(this, slots + 4, inputs, outputs);
         sideConfiguration = SideConfiguration.getDefaultSideConfig();
         this.allowedSideConfigs = new ArrayList<>(Arrays.asList(allowedSideConfigs));
         this.allowedSideConfigs.add(SideConfiguration.NONE);
         this.energyStorage = new CustomEnergyStorage(energyStorage, energyIn, energyOut);
     }
 
-    public BaseTileEntityMachineBlock(TileEntityType<?> tileEntityTypeIn, int slots, Integer[] inputs, Integer[] outputs, SideConfiguration[] allowedSideConfigs, int energyStorage, int energyInOut) {
+    public BaseTileEntityMachineBlock(TileEntityType<?> tileEntityTypeIn, int slots, boolean addons, Integer[] inputs, Integer[] outputs, SideConfiguration[] allowedSideConfigs, int energyStorage, int energyIn, int energyOut) {
         super(tileEntityTypeIn);
-        handler = new CustomItemStackHandler(this, slots, inputs, outputs);
+        this.addons = addons;
+        handler = new CustomItemStackHandler(this, slots + (this.addons ? 4 : 0), inputs, outputs);
+        sideConfiguration = SideConfiguration.getDefaultSideConfig();
         this.allowedSideConfigs = new ArrayList<>(Arrays.asList(allowedSideConfigs));
         this.allowedSideConfigs.add(SideConfiguration.NONE);
-        this.energyStorage = new CustomEnergyStorage(energyStorage, energyInOut);
+        this.energyStorage = new CustomEnergyStorage(energyStorage, energyIn, energyOut);
     }
 
     public void setSideConfig(Direction direction, SideConfiguration sideConfig) {
@@ -69,6 +76,26 @@ public abstract class BaseTileEntityMachineBlock extends TileEntity implements I
         return SideConfiguration.NONE;
     }
 
+    public int getTicks(int baseRemove) {
+        int remove = baseRemove;
+        for (int i = handler.getSlots() - 4; i < handler.getSlots(); i++) {
+            if (!handler.getStackInSlot(i).isEmpty()) {
+                remove = BaseUpgradeItem.getTickTimeRemove(remove, handler.getStackInSlot(i));
+            }
+        }
+        return remove;
+    }
+
+    public int getEnergy(int baseEnergy) {
+        int remove = baseEnergy;
+        for (int i = handler.getSlots() - 4; i < handler.getSlots(); i++) {
+            if (!handler.getStackInSlot(i).isEmpty()) {
+                remove = BaseUpgradeItem.getEnergyUsage(remove, handler.getStackInSlot(i));
+            }
+        }
+        return remove;
+    }
+
     @Override
     protected void invalidateCaps() {
         lazyOptional.invalidate();
@@ -77,7 +104,7 @@ public abstract class BaseTileEntityMachineBlock extends TileEntity implements I
         super.invalidateCaps();
     }
 
-    public void changeBurningState(boolean value){
+    public void changeBurningState(boolean value) {
         BlockState blockState = world.getBlockState(pos);
         world.setBlockState(pos, blockState.with(BaseMachineBlock.BURNING, value), Constants.BlockFlags.NOTIFY_NEIGHBORS + Constants.BlockFlags.BLOCK_UPDATE);
     }
@@ -112,6 +139,7 @@ public abstract class BaseTileEntityMachineBlock extends TileEntity implements I
 
     @Override
     public CompoundNBT write(CompoundNBT compound) {
+        compound.putBoolean("addons", addons);
         compound.put("inventory", handler.serializeNBT());
         compound.put("energy", energyStorage.serializeNBT());
         SideConfiguration.writeToNBT(compound, sideConfiguration);
@@ -120,6 +148,7 @@ public abstract class BaseTileEntityMachineBlock extends TileEntity implements I
 
     @Override
     public void read(BlockState state, CompoundNBT nbt) {
+        addons = nbt.getBoolean("addons");
         handler.deserializeNBT(nbt.getCompound("inventory"));
         energyStorage.deserializeNBT(nbt.getCompound("energy"));
         sideConfiguration = SideConfiguration.readFromNBTConfig(nbt);
@@ -158,5 +187,14 @@ public abstract class BaseTileEntityMachineBlock extends TileEntity implements I
             }
         }
     }
+
+    @Nullable
+    public abstract Item[] getAllowedAddons();
+
+    public List<Item> getAllowedAddonsList() {
+        return Arrays.asList(getAllowedAddons());
+    }
+
+    public abstract int getLightValue();
 
 }

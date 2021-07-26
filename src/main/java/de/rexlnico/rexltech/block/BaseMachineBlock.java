@@ -49,4 +49,5 @@ public abstract class BaseMachineBlock extends Block implements IWrenchBreakable
         builder.add(FACING);
         builder.add(BURNING);
     }
+
 }

@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "rexltech:energy_cell"
+          "name": "rexltech:basic_energy_cell"
         }
       ]
     }

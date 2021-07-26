@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "burning=false,facing=north": { "model": "rexltech:block/crusher" },
+    "burning=false,facing=south": { "model": "rexltech:block/crusher", "y": 180 },
+    "burning=false,facing=west": { "model": "rexltech:block/crusher", "y": 270 },
+    "burning=false,facing=east": { "model": "rexltech:block/crusher", "y": 90 },
+    "burning=true,facing=north": { "model": "rexltech:block/crusher_on" },
+    "burning=true,facing=south": { "model": "rexltech:block/crusher_on", "y": 180 },
+    "burning=true,facing=west": { "model": "rexltech:block/crusher_on", "y": 270 },
+    "burning=true,facing=east": { "model": "rexltech:block/crusher_on", "y": 90 }
+  }
+}
