@@ -1,0 +1,6 @@
+{
+  "parent": "rexltech:block/cable",
+  "textures": {
+    "cable": "rexltech:blocks/basic_energy_cable"
+  }
+}

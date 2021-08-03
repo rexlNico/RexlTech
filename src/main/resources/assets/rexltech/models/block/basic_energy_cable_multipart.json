@@ -1,0 +1,6 @@
+{
+  "parent": "rexltech:block/cable_multipart",
+  "textures": {
+    "mp": "rexltech:blocks/basic_energy_cable"
+  }
+}

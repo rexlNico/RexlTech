@@ -171,7 +171,7 @@ public abstract class BaseTileEntityMachineBlock extends TileEntity implements I
             for (Direction direction : Direction.values()) {
                 TileEntity te = world.getTileEntity(pos.offset(direction));
                 if (te != null) {
-                    boolean doContinue = te.getCapability(CapabilityEnergy.ENERGY, direction.getOpposite()).map(handler -> {
+                    boolean doContinue = te.getCapability(CapabilityEnergy.ENERGY, direction).map(handler -> {
                         if (handler.canReceive()) {
                             int received = handler.receiveEnergy(Math.min(capacity.get(), energyStorage.getMaxExtract()), false);
                             capacity.addAndGet(-received);

@@ -1,0 +1,20 @@
+{
+  "jetpack": {
+    "sounds": [
+      "rexltech:jetpack"
+    ],
+    "subtitle": "subtitle.rexltech.jetpack"
+  },
+  "crusher": {
+    "sounds": [
+      "rexltech:crusher"
+    ],
+    "subtitle": "subtitle.rexltech.chrusher"
+  },
+  "coal_generator": {
+    "sounds": [
+      "rexltech:coal_generator"
+    ],
+    "subtitle": "subtitle.rexltech.coal_generator"
+  }
+}

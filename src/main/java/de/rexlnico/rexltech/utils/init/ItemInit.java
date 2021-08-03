@@ -21,12 +21,14 @@ public class ItemInit {
     public static final RegistryObject<Item> NETHERITE_DUST = ITEMS.register("netherite_dust", () -> new Item(new Item.Properties().group(ResourcesGroup.RESOURCES_GROUP)));
     public static final RegistryObject<Item> DRILL = ITEMS.register("drill", Drill::new);
     public static final RegistryObject<Item> MAGNET = ITEMS.register("magnet", Magnet::new);
+    public static final RegistryObject<Item> JETPACK = ITEMS.register("jetpack", Jetpack::new);
     public static final RegistryObject<BlockItem> COPPER_BLOCK = ITEMS.register("copper_block", () -> new BlockItem(BlockInit.COPPER_BLOCK.get(), new Item.Properties().group(ResourcesGroup.RESOURCES_GROUP)));
     public static final RegistryObject<BlockItem> COPPER_ORE = ITEMS.register("copper_ore", () -> new BlockItem(BlockInit.COPPER_ORE.get(), new Item.Properties().group(ResourcesGroup.RESOURCES_GROUP)));
 
     public static final RegistryObject<BlockItem> COAL_GENERATOR = ITEMS.register("coal_generator", () -> new BlockItem(BlockInit.COAL_GENERATOR.get(), new Item.Properties().group(MachineGroup.MACHINEGROUP)));
     public static final RegistryObject<BlockItem> BASIC_ENERGY_CELL = ITEMS.register("basic_energy_cell", () -> new BaseEnergyCellBlockItem(BlockInit.BASIC_ENERGY_CELL.get(), new Item.Properties().group(MachineGroup.MACHINEGROUP)));
     public static final RegistryObject<BlockItem> CRUSHER = ITEMS.register("crusher", () -> new BlockItem(BlockInit.CRUSHER.get(), new Item.Properties().group(MachineGroup.MACHINEGROUP)));
+    public static final RegistryObject<BlockItem> BASIC_ENERGY_CABLE = ITEMS.register("basic_energy_cable", () -> new BlockItem(BlockInit.BASIC_ENERGY_CABLE.get(), new Item.Properties().group(MachineGroup.MACHINEGROUP)));
 
     public static final RegistryObject<Item> WRENCH = ITEMS.register("wrench", Wrench::new);
 

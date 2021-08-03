@@ -1,6 +1,7 @@
 package de.rexlnico.rexltech.utils.init;
 
 import de.rexlnico.rexltech.RexlTech;
+import de.rexlnico.rexltech.block.BasicEnergyCable;
 import de.rexlnico.rexltech.block.BasicEnergyCell;
 import de.rexlnico.rexltech.block.CoalGenerator;
 import de.rexlnico.rexltech.block.Crusher;
@@ -22,6 +23,7 @@ public class BlockInit {
     public static final RegistryObject<Block> COAL_GENERATOR = BLOCKS.register("coal_generator", CoalGenerator::new);
     public static final RegistryObject<Block> BASIC_ENERGY_CELL = BLOCKS.register("basic_energy_cell", BasicEnergyCell::new);
     public static final RegistryObject<Block> CRUSHER = BLOCKS.register("crusher", Crusher::new);
+    public static final RegistryObject<Block> BASIC_ENERGY_CABLE = BLOCKS.register("basic_energy_cable", BasicEnergyCable::new);
 
 
 }

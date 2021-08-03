@@ -13,19 +13,18 @@ public class CustomEnergyStorage extends EnergyStorage {
         super(capacity, maxReceive, maxExtract);
     }
 
-    public int addEnergy(int energy, boolean simulate){
+    public int addEnergy(int energy, boolean simulate) {
         int after = getEnergyStored() + energy;
-        if(after <= getMaxEnergyStored()){
-            if(!simulate) this.energy = after;
+        if (after <= getMaxEnergyStored()) {
+            if (!simulate) this.energy = after;
             return energy;
         }
         int remaining = after - getMaxEnergyStored();
-        if(!simulate) this.energy = getMaxEnergyStored();
+        if (!simulate) this.energy = getMaxEnergyStored();
         return energy - remaining;
     }
 
-    public CompoundNBT serializeNBT()
-    {
+    public CompoundNBT serializeNBT() {
         CompoundNBT tag = new CompoundNBT();
         tag.putInt("capacity", getMaxEnergyStored());
         tag.putInt("energy", getEnergyStored());
@@ -44,26 +43,26 @@ public class CustomEnergyStorage extends EnergyStorage {
         return toReturn;
     }
 
-    public void deserializeNBT(CompoundNBT nbt)
-    {
+    public void deserializeNBT(CompoundNBT nbt) {
         capacity = nbt.getInt("capacity");
         energy = nbt.getInt("energy");
         maxExtract = nbt.getInt("extract");
         maxReceive = nbt.getInt("receive");
     }
 
-    public void setEnergy(int energy){
+    public void setEnergy(int energy) {
         this.energy = energy;
     }
-    public void setMaxEnergy(int capacity){
+
+    public void setMaxEnergy(int capacity) {
         this.capacity = capacity;
     }
 
-    public int getMaxReceive(){
+    public int getMaxReceive() {
         return maxReceive;
     }
 
-    public int getMaxExtract(){
+    public int getMaxExtract() {
         return maxExtract;
     }
 

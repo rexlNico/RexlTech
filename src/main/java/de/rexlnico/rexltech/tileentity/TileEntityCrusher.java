@@ -4,11 +4,13 @@ import de.rexlnico.rexltech.block.Crusher;
 import de.rexlnico.rexltech.item.recipe.CrusherRecipe;
 import de.rexlnico.rexltech.utils.init.ItemInit;
 import de.rexlnico.rexltech.utils.init.RecipeInit;
+import de.rexlnico.rexltech.utils.init.SoundInit;
 import de.rexlnico.rexltech.utils.init.TileEntityInit;
 import de.rexlnico.rexltech.utils.tileentity.SideConfiguration;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -110,6 +112,12 @@ public class TileEntityCrusher extends BaseTileEntityMachineBlock {
                 progress = 0;
                 maxProgress = 0;
             }
+        }
+        if (energyStorage.getEnergyStored() != energyStorage.getMaxEnergyStored() && getEnergy(basEnergyUsage) == 0) {
+            energyStorage.setEnergy(energyStorage.getMaxEnergyStored());
+        }
+        if (progress > 0) {
+            world.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundInit.CRUSHER, SoundCategory.BLOCKS, 1, 1, true);
         }
         BlockState blockState = world.getBlockState(pos);
         if (blockState.get(Crusher.BURNING) != progress > 0) {

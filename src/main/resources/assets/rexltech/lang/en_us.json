@@ -20,6 +20,9 @@
   "item.rexltech.speed_upgrade": "Speed Upgrade",
   "item.rexltech.energy_production_upgrade": "Energy Production Upgrade",
   "item.rexltech.creative_energy_upgrade": "Creative Energy Upgrade",
+  "item.rexltech.jetpack": "Jetpack",
+  "block.rexltech.basic_energy_cable": "Basic Energy Cable",
+  "tile.rexltech.basic_energy_cable": "Basic Energy Cable",
   "block.rexltech.coal_generator": "Coal Generator",
   "tile.rexltech.coal_generator": "Coal Generator",
   "screen.rexltech.coal_generator": "Coal Generator",
@@ -28,5 +31,8 @@
   "screen.rexltech.crusher": "Crusher",
   "description.energy_production_upgrade": "Increases the power produced and the fuel usage",
   "description.speed_upgrade": "Increases the speed and the energy usage",
-  "description.creative_energy_upgrade": "Removes the power usage"
+  "description.creative_energy_upgrade": "Removes the power usage",
+  "description.basic_energy_cable": "Transfer: %s FE/t",
+  "keybind.rexltech.engine": "Toggle Engine",
+  "keybind.rexltech.hover": "Toggle Hover Mode"
 }

@@ -47,13 +47,13 @@ public class CoalGenerator extends BaseMachineBlock {
 
     @Override
     public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) {
-        return world.getTileEntity(pos) != null ? ((BaseTileEntityMachineBlock) world.getTileEntity(pos)).getLightValue() : 0;
+        return world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof BaseTileEntityMachineBlock ? ((BaseTileEntityMachineBlock) world.getTileEntity(pos)).getLightValue() : 0;
     }
 
     @Override
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        if(!worldIn.isRemote){
-            if(player.getHeldItem(handIn).getItem().equals(ItemInit.WRENCH.get())) return ActionResultType.SUCCESS;
+        if (!worldIn.isRemote) {
+            if (player.getHeldItem(handIn).getItem().equals(ItemInit.WRENCH.get())) return ActionResultType.SUCCESS;
             TileEntityCoalGenerator tileEntityCoalGenerator = (TileEntityCoalGenerator) worldIn.getTileEntity(pos);
             INamedContainerProvider containerProvider = new INamedContainerProvider() {
                 @Override
