@@ -1,5 +1,6 @@
 package de.rexlnico.rexltech.utils.item;
 
+import de.rexlnico.rexltech.utils.helper.EnergyHelper;
 import de.rexlnico.rexltech.utils.tileentity.CustomItemEnergyStorage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
@@ -103,13 +104,9 @@ public abstract class EnergyArmorItem extends ArmorItem {
     }
 
     public StringTextComponent getEnergyText(ItemStack stack) {
-        StringTextComponent textComponent = new StringTextComponent(getEnergyShort(getEnergyStored(stack)) + " FE / " + getEnergyShort(energyCapacity) + " FE");
+        StringTextComponent textComponent = EnergyHelper.getEnergyStorageTextComponent(getEnergyStored(stack), energyCapacity);
         textComponent.setStyle(Style.EMPTY.setColor(Color.fromHex("#cc0099")));
         return textComponent;
-    }
-
-    public String getEnergyShort(int energy) {
-        return Integer.toString(energy);
     }
 
 }

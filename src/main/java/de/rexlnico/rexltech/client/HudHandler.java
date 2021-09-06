@@ -3,9 +3,10 @@ package de.rexlnico.rexltech.client;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import de.rexlnico.rexltech.RexlTech;
+import de.rexlnico.rexltech.config.RexlTechClientConfig;
 import de.rexlnico.rexltech.item.Jetpack;
 import de.rexlnico.rexltech.utils.Colors;
-import de.rexlnico.rexltech.utils.EnergyHelper;
+import de.rexlnico.rexltech.utils.helper.EnergyHelper;
 import mcjty.theoneprobe.rendering.RenderHelper;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
@@ -82,22 +83,20 @@ public class HudHandler {
 
     private HudPos getHudPos() {
         MainWindow window = Minecraft.getInstance().getMainWindow();
-        int xOffset = 0;
-        int yOffset = 0;
 
-        switch (1) {
+        switch (RexlTechClientConfig.jetpackHudPositionConfigValue.get()) {
             case 0:
-                return new HudPos(10 + xOffset, 30 + yOffset, 0);
+                return new HudPos(10, 30, 0);
             case 1:
-                return new HudPos(10 + xOffset, window.getScaledHeight() / 2 + yOffset, 0);
+                return new HudPos(10, window.getScaledHeight() / 2, 0);
             case 2:
-                return new HudPos(10 + xOffset, window.getScaledHeight() - 30 + yOffset, 0);
+                return new HudPos(10, window.getScaledHeight() - 30, 0);
             case 3:
-                return new HudPos(window.getScaledWidth() - 8 - xOffset, 30 + yOffset, 1);
+                return new HudPos(window.getScaledWidth() - 8, 30, 1);
             case 4:
-                return new HudPos(window.getScaledWidth() - 8 - xOffset, window.getScaledHeight() / 2 + yOffset, 1);
+                return new HudPos(window.getScaledWidth() - 8, window.getScaledHeight() / 2, 1);
             case 5:
-                return new HudPos(window.getScaledWidth() - 8 - xOffset, window.getScaledHeight() - 30 + yOffset, 1);
+                return new HudPos(window.getScaledWidth() - 8, window.getScaledHeight() - 30, 1);
         }
 
         return null;
@@ -114,4 +113,14 @@ public class HudHandler {
             this.side = side;
         }
     }
+
+    public enum HudPosition {
+        LeftTop,
+        LeftMiddle,
+        LeftBottom,
+        RightTop,
+        RightMiddle,
+        RightBottom;
+    }
+
 }

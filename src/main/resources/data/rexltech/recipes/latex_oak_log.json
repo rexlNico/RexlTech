@@ -1,0 +1,9 @@
+{
+  "type": "rexltech:latex_extractor",
+  "ingredient": {
+    "item": "minecraft:oak_log"
+  },
+  "work_time": 400,
+  "production": 1,
+  "leftover": "minecraft:stripped_oak_log"
+}

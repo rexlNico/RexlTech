@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "planks",
+  "ingredients": [
+    {
+      "tag": "rexltech:rubber_logs"
+    }
+  ],
+  "result": {
+    "item": "rexltech:rubber_planks",
+    "count": 4
+  }
+}

@@ -3,6 +3,7 @@ package de.rexlnico.rexltech.utils.init;
 import de.rexlnico.rexltech.RexlTech;
 import de.rexlnico.rexltech.container.CoalGeneratorContainer;
 import de.rexlnico.rexltech.container.CrusherContainer;
+import de.rexlnico.rexltech.container.LatexExtractorContainer;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -15,16 +16,22 @@ public class ContainerInit {
 
     public static final DeferredRegister<ContainerType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, RexlTech.MODID);
 
-    public static final RegistryObject<ContainerType<CoalGeneratorContainer>> COAL_GENERATOR_CONTAINER = CONTAINERS.register("coal_generator", () -> IForgeContainerType.create(((windowId, inv, data) ->{
+    public static final RegistryObject<ContainerType<CoalGeneratorContainer>> COAL_GENERATOR_CONTAINER = CONTAINERS.register("coal_generator", () -> IForgeContainerType.create(((windowId, inv, data) -> {
         BlockPos pos = data.readBlockPos();
         World world = inv.player.getEntityWorld();
         return new CoalGeneratorContainer(windowId, world, pos, inv, inv.player);
     })));
 
-    public static final RegistryObject<ContainerType<CrusherContainer>> CRUSHER_CONTAINER = CONTAINERS.register("crusher", () -> IForgeContainerType.create(((windowId, inv, data) ->{
+    public static final RegistryObject<ContainerType<CrusherContainer>> CRUSHER_CONTAINER = CONTAINERS.register("crusher", () -> IForgeContainerType.create(((windowId, inv, data) -> {
         BlockPos pos = data.readBlockPos();
         World world = inv.player.getEntityWorld();
         return new CrusherContainer(windowId, world, pos, inv, inv.player);
+    })));
+
+    public static final RegistryObject<ContainerType<LatexExtractorContainer>> LATEX_EXTRACTOR_CONTAINER = CONTAINERS.register("latex_extractor", () -> IForgeContainerType.create(((windowId, inv, data) -> {
+        BlockPos pos = data.readBlockPos();
+        World world = inv.player.getEntityWorld();
+        return new LatexExtractorContainer(windowId, world, pos, inv, inv.player);
     })));
 
 }

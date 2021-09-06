@@ -3,6 +3,8 @@ package de.rexlnico.rexltech.utils.jei;
 import de.rexlnico.rexltech.RexlTech;
 import de.rexlnico.rexltech.item.recipe.CrusherRecipe;
 import de.rexlnico.rexltech.item.recipe.CrusherRecipeCategory;
+import de.rexlnico.rexltech.item.recipe.LatexExtractorCategory;
+import de.rexlnico.rexltech.item.recipe.LatexExtractorRecipe;
 import de.rexlnico.rexltech.screen.CrusherScreen;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -19,6 +21,7 @@ import java.util.*;
 public class JEIPlugin implements IModPlugin {
 
     public static final Map<Item, CrusherRecipe> CRUSHER_RECIPES = new HashMap<>();
+    public static final Map<Item, LatexExtractorRecipe> LATEX_EXTRACTOR_RECIPES = new HashMap<>();
 
     @Override
     public ResourceLocation getPluginUid() {
@@ -29,17 +32,25 @@ public class JEIPlugin implements IModPlugin {
     public void registerCategories(IRecipeCategoryRegistration registration) {
         IModPlugin.super.registerCategories(registration);
         registration.addRecipeCategories(new CrusherRecipeCategory(registration.getJeiHelpers().getGuiHelper()));
+        registration.addRecipeCategories(new LatexExtractorCategory(registration.getJeiHelpers().getGuiHelper()));
     }
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
         IModPlugin.super.registerRecipes(registration);
         registration.addRecipes(getSortedCrusherRecipes(), new ResourceLocation(RexlTech.MODID, "crushing"));
+        registration.addRecipes(getSortedLatexExtractorRecipes(), new ResourceLocation(RexlTech.MODID, "latex_extractor"));
     }
 
-    private Collection<CrusherRecipe> getSortedCrusherRecipes(){
+    private Collection<CrusherRecipe> getSortedCrusherRecipes() {
         List<CrusherRecipe> coll = new ArrayList<>(CRUSHER_RECIPES.values());
         coll.sort(Comparator.comparing(CrusherRecipe::getOutputAmount));
+        return coll;
+    }
+
+    private Collection<LatexExtractorRecipe> getSortedLatexExtractorRecipes() {
+        List<LatexExtractorRecipe> coll = new ArrayList<>(LATEX_EXTRACTOR_RECIPES.values());
+        coll.sort(Comparator.comparing(LatexExtractorRecipe::getLatexProduction));
         return coll;
     }
 

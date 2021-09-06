@@ -1,6 +1,6 @@
 package de.rexlnico.rexltech.item;
 
-import de.rexlnico.rexltech.utils.WorldUtil;
+import de.rexlnico.rexltech.utils.helper.WorldHelper;
 import de.rexlnico.rexltech.utils.item.EnergyItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -30,7 +30,7 @@ public class Drill extends EnergyItem {
         boolean toReturn = false;
         if (this.getEnergyStored(stack) >= energyCostPerBlock) {
 
-            BlockRayTraceResult ray = WorldUtil.getNearestBlockWithDefaultReachDistance(player.world, player);
+            BlockRayTraceResult ray = WorldHelper.getNearestBlockWithDefaultReachDistance(player.world, player);
             if (!player.isSneaking()) {
                 toReturn = this.breakBlocks(stack, 1, player.world, pos, ray.getFace(), player);
             } else {
@@ -76,7 +76,7 @@ public class Drill extends EnergyItem {
         int use = energyCostPerBlock;
         if (this.getEnergyStored(stack) >= use) {
             this.tryHarvestBlock(world, aPos, false, stack, player, use);
-        }else{
+        } else {
             return false;
         }
         if (radius > 0) {

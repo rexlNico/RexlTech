@@ -1,0 +1,7 @@
+{
+  "parent": "block/cube_column",
+  "textures": {
+    "end": "rexltech:blocks/rubber_log",
+    "side": "rexltech:blocks/rubber_log"
+  }
+}

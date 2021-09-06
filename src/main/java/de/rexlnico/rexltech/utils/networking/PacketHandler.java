@@ -19,6 +19,7 @@ public class PacketHandler {
     public static void init() {
         INSTANCE.registerMessage(id++, SideConfigChangePacket.class, SideConfigChangePacket::toBytes, SideConfigChangePacket::new, SideConfigChangePacket::handle);
         INSTANCE.registerMessage(id++, UpdateInputMessage.class, UpdateInputMessage::toBytes, UpdateInputMessage::fromBytes, UpdateInputMessage::handle);
+        INSTANCE.registerMessage(id++, FluidTankUpdatePacket.class, FluidTankUpdatePacket::toBytes, FluidTankUpdatePacket::new, FluidTankUpdatePacket::handle);
     }
 
 }

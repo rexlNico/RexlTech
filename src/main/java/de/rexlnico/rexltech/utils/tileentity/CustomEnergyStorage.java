@@ -1,16 +1,21 @@
 package de.rexlnico.rexltech.utils.tileentity;
 
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.energy.EnergyStorage;
 
 public class CustomEnergyStorage extends EnergyStorage {
 
-    public CustomEnergyStorage(int capacity, int maxTransfer) {
+    private TileEntity tile;
+
+    public CustomEnergyStorage(TileEntity tile, int capacity, int maxTransfer) {
         super(capacity, maxTransfer);
+        this.tile = tile;
     }
 
-    public CustomEnergyStorage(int capacity, int maxReceive, int maxExtract) {
+    public CustomEnergyStorage(TileEntity tile, int capacity, int maxReceive, int maxExtract) {
         super(capacity, maxReceive, maxExtract);
+        this.tile = tile;
     }
 
     public int addEnergy(int energy, boolean simulate) {
@@ -21,6 +26,7 @@ public class CustomEnergyStorage extends EnergyStorage {
         }
         int remaining = after - getMaxEnergyStored();
         if (!simulate) this.energy = getMaxEnergyStored();
+        markDirty();
         return energy - remaining;
     }
 
@@ -33,6 +39,10 @@ public class CustomEnergyStorage extends EnergyStorage {
         return tag;
     }
 
+    public void markDirty() {
+        tile.markDirty();
+    }
+
     public int extractEnergyInternal(int maxExtract, boolean simulate) {
         int before = this.maxExtract;
         this.maxExtract = Integer.MAX_VALUE;
@@ -40,7 +50,20 @@ public class CustomEnergyStorage extends EnergyStorage {
         int toReturn = this.extractEnergy(maxExtract, simulate);
 
         this.maxExtract = before;
+        markDirty();
         return toReturn;
+    }
+
+    @Override
+    public int receiveEnergy(int maxReceive, boolean simulate) {
+        markDirty();
+        return super.receiveEnergy(maxReceive, simulate);
+    }
+
+    @Override
+    public int extractEnergy(int maxExtract, boolean simulate) {
+        markDirty();
+        return super.extractEnergy(maxExtract, simulate);
     }
 
     public void deserializeNBT(CompoundNBT nbt) {
@@ -51,10 +74,12 @@ public class CustomEnergyStorage extends EnergyStorage {
     }
 
     public void setEnergy(int energy) {
+        markDirty();
         this.energy = energy;
     }
 
     public void setMaxEnergy(int capacity) {
+        markDirty();
         this.capacity = capacity;
     }
 

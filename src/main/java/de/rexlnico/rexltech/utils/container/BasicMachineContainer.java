@@ -1,5 +1,6 @@
 package de.rexlnico.rexltech.utils.container;
 
+import de.rexlnico.rexltech.tileentity.BaseTileEntity;
 import de.rexlnico.rexltech.tileentity.BaseTileEntityMachineBlock;
 import de.rexlnico.rexltech.utils.tileentity.CustomEnergyStorage;
 import de.rexlnico.rexltech.utils.tileentity.SideConfiguration;
@@ -22,29 +23,35 @@ import javax.annotation.Nullable;
 
 public abstract class BasicMachineContainer extends Container {
 
-    public BaseTileEntityMachineBlock tileEntity;
+    public BaseTileEntity tileEntity;
     public PlayerEntity playerEntity;
     public IItemHandler playerInventory;
 
     protected BasicMachineContainer(@Nullable ContainerType<?> type, int id, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity playerEntity) {
         super(type, id);
-        tileEntity = (BaseTileEntityMachineBlock) world.getTileEntity(pos);
+        tileEntity = (BaseTileEntity) world.getTileEntity(pos);
         if (tileEntity != null) {
             tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(this::addConfigSlots);
         }
         this.playerEntity = playerEntity;
         this.playerInventory = new InvWrapper(playerInventory);
         layoutPlayerInventorySlots(8, 84);
-        trackPower();
+        if (tileEntity != null) {
+            if (tileEntity.getCapability(CapabilityEnergy.ENERGY).isPresent()) {
+                trackPower();
+            }
+        }
         trackSideConfig();
     }
 
     public void addConfigSlots(IItemHandler handler) {
         int slots = handler.getSlots();
-        addSlot(new AddonSlotItemHandler(handler, tileEntity.getAllowedAddonsList(), slots - 4, -24, 7));
-        addSlot(new AddonSlotItemHandler(handler, tileEntity.getAllowedAddonsList(), slots - 3, -24, 28));
-        addSlot(new AddonSlotItemHandler(handler, tileEntity.getAllowedAddonsList(), slots - 2, -24, 49));
-        addSlot(new AddonSlotItemHandler(handler, tileEntity.getAllowedAddonsList(), slots - 1, -24, 70));
+        if (tileEntity instanceof BaseTileEntityMachineBlock) {
+            addSlot(new AddonSlotItemHandler(handler, ((BaseTileEntityMachineBlock) tileEntity).getAllowedAddonsList(), slots - 4, -24, 7));
+            addSlot(new AddonSlotItemHandler(handler, ((BaseTileEntityMachineBlock) tileEntity).getAllowedAddonsList(), slots - 3, -24, 28));
+            addSlot(new AddonSlotItemHandler(handler, ((BaseTileEntityMachineBlock) tileEntity).getAllowedAddonsList(), slots - 2, -24, 49));
+            addSlot(new AddonSlotItemHandler(handler, ((BaseTileEntityMachineBlock) tileEntity).getAllowedAddonsList(), slots - 1, -24, 70));
+        }
     }
 
     public void trackSideConfig() {
@@ -156,6 +163,6 @@ public abstract class BasicMachineContainer extends Container {
         addSlotRange(playerInventory, 0, leftCol, topRow, 9, 18);
     }
 
-    public abstract BaseTileEntityMachineBlock getTileEntity();
+    public abstract BaseTileEntity getTileEntity();
 
 }

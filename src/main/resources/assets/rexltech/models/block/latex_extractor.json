@@ -1,0 +1,12 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "particle": "rexltech:blocks/latex_extractor_top",
+    "up": "rexltech:blocks/latex_extractor_top",
+    "down": "rexltech:blocks/latex_extractor_bottom",
+    "north": "rexltech:blocks/latex_extractor_front",
+    "east": "rexltech:blocks/latex_extractor_side",
+    "south": "rexltech:blocks/latex_extractor_side",
+    "west": "rexltech:blocks/latex_extractor_side"
+  }
+}

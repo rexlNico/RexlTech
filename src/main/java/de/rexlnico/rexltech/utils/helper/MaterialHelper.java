@@ -1,4 +1,4 @@
-package de.rexlnico.rexltech.utils.item;
+package de.rexlnico.rexltech.utils.helper;
 
 import de.rexlnico.rexltech.RexlTech;
 import net.minecraft.inventory.EquipmentSlotType;

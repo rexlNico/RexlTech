@@ -1,4 +1,4 @@
-package de.rexlnico.rexltech.client;
+package de.rexlnico.rexltech.client.model;
 
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
@@ -6,6 +6,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 
 public class JetpackModel extends BipedModel<LivingEntity> {
     private final ModelRenderer[] energyBarLeft = new ModelRenderer[6];
@@ -121,27 +122,27 @@ public class JetpackModel extends BipedModel<LivingEntity> {
     public void setLivingAnimations(LivingEntity entity, float limbSwing, float limbSwingAmount, float partialTick) {
         super.setLivingAnimations(entity, limbSwing, limbSwingAmount, partialTick);
         ItemStack chest = entity.getItemStackFromSlot(EquipmentSlotType.CHEST);
-        chest.getCapability(CapabilityEnergy.ENERGY).map(energy -> {
-            double stored = (double) energy.getEnergyStored() / (double) energy.getMaxEnergyStored();
+        int storageStored = chest.getCapability(CapabilityEnergy.ENERGY).map(IEnergyStorage::getEnergyStored).orElse(0);
+        int storageMax = chest.getCapability(CapabilityEnergy.ENERGY).map(IEnergyStorage::getMaxEnergyStored).orElse(0);
+        double stored = (double) storageStored / (double) storageMax;
+        System.out.println(stored);
 
-            int state = 0;
-            if (stored > 0.8) {
-                state = 5;
-            } else if (stored > 0.6) {
-                state = 4;
-            } else if (stored > 0.4) {
-                state = 3;
-            } else if (stored > 0.2) {
-                state = 2;
-            } else if (stored > 0) {
-                state = 1;
-            }
+        int state = 0;
+        if (stored > 0.8) {
+            state = 5;
+        } else if (stored > 0.6) {
+            state = 4;
+        } else if (stored > 0.4) {
+            state = 3;
+        } else if (stored > 0.2) {
+            state = 2;
+        } else if (stored > 0) {
+            state = 1;
+        }
 
-            this.resetEnergyBars();
-            this.energyBarLeft[state].showModel = true;
-            this.energyBarRight[state].showModel = true;
-            return 0;
-        });
+        this.resetEnergyBars();
+        this.energyBarLeft[state].showModel = true;
+        this.energyBarRight[state].showModel = true;
     }
 
     private void setRotation(ModelRenderer model, float x, float y, float z) {

@@ -1,6 +1,5 @@
 package de.rexlnico.rexltech.tileentity;
 
-import de.rexlnico.rexltech.block.BaseMachineBlock;
 import de.rexlnico.rexltech.item.BaseUpgradeItem;
 import de.rexlnico.rexltech.utils.tileentity.CustomEnergyStorage;
 import de.rexlnico.rexltech.utils.tileentity.CustomItemStackHandler;
@@ -8,15 +7,14 @@ import de.rexlnico.rexltech.utils.tileentity.SideConfiguration;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -27,10 +25,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public abstract class BaseTileEntityMachineBlock extends TileEntity implements ITickableTileEntity {
+public abstract class BaseTileEntityMachineBlock extends BaseTileEntity {
 
-    public SideConfiguration[] sideConfiguration;
-    public ArrayList<SideConfiguration> allowedSideConfigs;
     public CustomItemStackHandler handler;
     public CustomEnergyStorage energyStorage;
     private LazyOptional<ItemStackHandler> sidedLazyOptional = LazyOptional.of(() -> handler);
@@ -44,7 +40,7 @@ public abstract class BaseTileEntityMachineBlock extends TileEntity implements I
         sideConfiguration = SideConfiguration.getDefaultSideConfig();
         this.allowedSideConfigs = new ArrayList<>(Arrays.asList(allowedSideConfigs));
         this.allowedSideConfigs.add(SideConfiguration.NONE);
-        this.energyStorage = new CustomEnergyStorage(energyStorage, energyIn, energyOut);
+        this.energyStorage = new CustomEnergyStorage(this, energyStorage, energyIn, energyOut);
     }
 
     public BaseTileEntityMachineBlock(TileEntityType<?> tileEntityTypeIn, int slots, boolean addons, Integer[] inputs, Integer[] outputs, SideConfiguration[] allowedSideConfigs, int energyStorage, int energyIn, int energyOut) {
@@ -54,26 +50,7 @@ public abstract class BaseTileEntityMachineBlock extends TileEntity implements I
         sideConfiguration = SideConfiguration.getDefaultSideConfig();
         this.allowedSideConfigs = new ArrayList<>(Arrays.asList(allowedSideConfigs));
         this.allowedSideConfigs.add(SideConfiguration.NONE);
-        this.energyStorage = new CustomEnergyStorage(energyStorage, energyIn, energyOut);
-    }
-
-    public void setSideConfig(Direction direction, SideConfiguration sideConfig) {
-        sideConfiguration[direction.ordinal()] = sideConfig;
-    }
-
-    public SideConfiguration getNextConfiguration(Direction direction) {
-        int i = 0;
-        SideConfiguration side = sideConfiguration[direction.ordinal()];
-        for (SideConfiguration all : allowedSideConfigs) {
-            if (all == side) {
-                if (i + 1 >= allowedSideConfigs.size()) {
-                    return allowedSideConfigs.get(0);
-                }
-                return allowedSideConfigs.get(i + 1);
-            }
-            i++;
-        }
-        return SideConfiguration.NONE;
+        this.energyStorage = new CustomEnergyStorage(this, energyStorage, energyIn, energyOut);
     }
 
     public int getTicks(int baseRemove) {
@@ -102,11 +79,6 @@ public abstract class BaseTileEntityMachineBlock extends TileEntity implements I
         sidedLazyOptional.invalidate();
         energyLazyOptional.invalidate();
         super.invalidateCaps();
-    }
-
-    public void changeBurningState(boolean value) {
-        BlockState blockState = world.getBlockState(pos);
-        world.setBlockState(pos, blockState.with(BaseMachineBlock.BURNING, value), Constants.BlockFlags.NOTIFY_NEIGHBORS + Constants.BlockFlags.BLOCK_UPDATE);
     }
 
     @Nonnull
@@ -157,13 +129,10 @@ public abstract class BaseTileEntityMachineBlock extends TileEntity implements I
 
     @Override
     public void tick() {
+        super.tick();
         if (world.isRemote) return;
-        onTick();
         sendOutPower();
-        markDirty();
     }
-
-    public abstract void onTick();
 
     public void sendOutPower() {
         AtomicInteger capacity = new AtomicInteger(energyStorage.getEnergyStored());
@@ -188,13 +157,16 @@ public abstract class BaseTileEntityMachineBlock extends TileEntity implements I
         }
     }
 
+    @Override
+    public void setTanksStack(int id, FluidStack stack) {
+
+    }
+
     @Nullable
     public abstract Item[] getAllowedAddons();
 
     public List<Item> getAllowedAddonsList() {
         return Arrays.asList(getAllowedAddons());
     }
-
-    public abstract int getLightValue();
 
 }

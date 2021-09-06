@@ -1,6 +1,6 @@
 package de.rexlnico.rexltech.utils.networking;
 
-import de.rexlnico.rexltech.tileentity.BaseTileEntityMachineBlock;
+import de.rexlnico.rexltech.tileentity.BaseTileEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -31,8 +31,8 @@ public class SideConfigChangePacket {
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            if (ctx.get().getSender().world.getTileEntity(blockPos) instanceof BaseTileEntityMachineBlock) {
-                BaseTileEntityMachineBlock tileEntity = (BaseTileEntityMachineBlock) ctx.get().getSender().world.getTileEntity(blockPos);
+            if (ctx.get().getSender().world.getTileEntity(blockPos) instanceof BaseTileEntity) {
+                BaseTileEntity tileEntity = (BaseTileEntity) ctx.get().getSender().world.getTileEntity(blockPos);
                 tileEntity.sideConfiguration[side] = tileEntity.getNextConfiguration(Direction.values()[side]);
                 tileEntity.markDirty();
             }

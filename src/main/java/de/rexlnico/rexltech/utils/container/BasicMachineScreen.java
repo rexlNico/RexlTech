@@ -4,6 +4,8 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import de.rexlnico.rexltech.RexlTech;
 import de.rexlnico.rexltech.block.BaseMachineBlock;
+import de.rexlnico.rexltech.tileentity.BaseTileEntityMachineBlock;
+import de.rexlnico.rexltech.utils.helper.EnergyHelper;
 import de.rexlnico.rexltech.utils.networking.PacketHandler;
 import de.rexlnico.rexltech.utils.networking.SideConfigChangePacket;
 import de.rexlnico.rexltech.utils.tileentity.SideConfiguration;
@@ -18,6 +20,8 @@ import net.minecraft.util.text.Color;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,11 +70,11 @@ public abstract class BasicMachineScreen<T extends BasicMachineContainer> extend
         int relY = (this.height - this.ySize) / 2;
         this.minecraft.getTextureManager().bindTexture(GUI);
         this.blit(matrixStack, relX, relY, 0, 0, this.xSize, this.ySize);
-        int energy = getEnergyStoredScaled(58);
-        this.blit(matrixStack, relX + 153 + xEnergyOffset, relY + 74 - energy + yEnergyOffset, 176, 58 + 14 - energy, 14, energy);
 
-        this.minecraft.getTextureManager().bindTexture(ADDONS);
-        this.blit(matrixStack, relX - 31, relY, 0, 0, 31, 93);
+        if (container.getTileEntity().getCapability(CapabilityEnergy.ENERGY).isPresent()) {
+            drawGuiContainerEnergy(matrixStack);
+            drawGuiContainerAddons(matrixStack);
+        }
 
         this.minecraft.getTextureManager().bindTexture(CONFIG);
         if (isConfigOpen.contains(playerInventory.player)) {
@@ -78,6 +82,21 @@ public abstract class BasicMachineScreen<T extends BasicMachineContainer> extend
         } else {
             this.blit(matrixStack, this.guiLeft + this.xSize, this.guiTop + 4, 88, 0, 22, 22);
         }
+    }
+
+    public void drawGuiContainerAddons(MatrixStack matrixStack) {
+        int relX = (this.width - this.xSize) / 2;
+        int relY = (this.height - this.ySize) / 2;
+        this.minecraft.getTextureManager().bindTexture(ADDONS);
+        this.blit(matrixStack, relX - 31, relY, 0, 0, 31, 93);
+    }
+
+    public void drawGuiContainerEnergy(MatrixStack matrixStack) {
+        int relX = (this.width - this.xSize) / 2;
+        int relY = (this.height - this.ySize) / 2;
+        this.minecraft.getTextureManager().bindTexture(GUI);
+        int energy = getEnergyStoredScaled(58);
+        this.blit(matrixStack, relX + 153 + xEnergyOffset, relY + 74 - energy + yEnergyOffset, 176, 58 + 14 - energy, 14, energy);
     }
 
     @Override
@@ -245,18 +264,26 @@ public abstract class BasicMachineScreen<T extends BasicMachineContainer> extend
         this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
         int relX = (this.width - this.xSize) / 2 - 1;
         int relY = (this.height - this.ySize) / 2 - 1;
-        if (mouseX >= relX + 153 && mouseX <= relX + 168) {
-            if (mouseY >= relY + 16 && mouseY <= relY + 75) {
-                StringTextComponent textComponent = new StringTextComponent(container.getEnergy() + " / " + container.getMaxEnergy());
-                textComponent.setStyle(Style.EMPTY.setColor(Color.fromInt(4210752)));
-                renderTooltip(matrixStack, textComponent, mouseX, mouseY);
+        if (container.getTileEntity().getCapability(CapabilityEnergy.ENERGY).isPresent()) {
+            if (mouseX >= relX + 153 && mouseX <= relX + 168) {
+                if (mouseY >= relY + 16 && mouseY <= relY + 75) {
+                    StringTextComponent textComponent = EnergyHelper.getEnergyStorageTextComponent(container.getEnergy(), container.getMaxEnergy());
+                    textComponent.setStyle(Style.EMPTY.setColor(Color.fromInt(4210752)));
+                    renderTooltip(matrixStack, textComponent, mouseX, mouseY);
+                }
             }
         }
     }
 
     public int getEnergyStoredScaled(int pixels) {
-        int i = container.getTileEntity().energyStorage.getEnergyStored();
-        int j = container.getTileEntity().energyStorage.getMaxEnergyStored();
+        int i = ((BaseTileEntityMachineBlock) container.getTileEntity()).energyStorage.getEnergyStored();
+        int j = ((BaseTileEntityMachineBlock) container.getTileEntity()).energyStorage.getMaxEnergyStored();
+        return i != 0 && j != 0 ? i * pixels / j : 0;
+    }
+
+    public int getTankScaled(int pixels, FluidTank tank) {
+        int i = tank.getFluidAmount();
+        int j = tank.getCapacity();
         return i != 0 && j != 0 ? i * pixels / j : 0;
     }
 

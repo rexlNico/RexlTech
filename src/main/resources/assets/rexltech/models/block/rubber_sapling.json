@@ -1,0 +1,6 @@
+{
+  "parent": "block/cross",
+  "textures": {
+    "cross": "rexltech:blocks/rubber_sapling"
+  }
+}

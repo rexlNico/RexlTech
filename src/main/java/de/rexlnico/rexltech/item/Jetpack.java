@@ -1,11 +1,11 @@
 package de.rexlnico.rexltech.item;
 
 import de.rexlnico.rexltech.RexlTech;
-import de.rexlnico.rexltech.client.JetpackModel;
+import de.rexlnico.rexltech.client.model.JetpackModel;
 import de.rexlnico.rexltech.utils.handler.InputHandler;
+import de.rexlnico.rexltech.utils.helper.MaterialHelper;
 import de.rexlnico.rexltech.utils.init.SoundInit;
 import de.rexlnico.rexltech.utils.item.EnergyArmorItem;
-import de.rexlnico.rexltech.utils.item.MaterialHelper;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;

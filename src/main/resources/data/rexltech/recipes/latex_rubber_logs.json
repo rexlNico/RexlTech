@@ -1,0 +1,8 @@
+{
+  "type": "rexltech:latex_extractor",
+  "ingredient": {
+    "tag": "rexltech:rubber_logs"
+  },
+  "work_time": 2400,
+  "production": 4
+}

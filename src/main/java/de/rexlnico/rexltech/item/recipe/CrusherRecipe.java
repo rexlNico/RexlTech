@@ -29,7 +29,7 @@ public class CrusherRecipe extends SingleItemRecipe {
         }
     }
 
-    public int getOutputAmount(){
+    public int getOutputAmount() {
         return result.getCount();
     }
 
@@ -66,7 +66,7 @@ public class CrusherRecipe extends SingleItemRecipe {
             buffer.writeInt(recipe.processTime);
         }
 
-        public void comparingByValue(){
+        public void comparingByValue() {
 
         }
 

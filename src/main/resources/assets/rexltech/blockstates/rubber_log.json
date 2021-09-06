@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "rexltech:block/rubber_log_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "rexltech:block/rubber_log"
+    },
+    "axis=z": {
+      "model": "rexltech:block/rubber_log_horizontal",
+      "x": 90
+    }
+  }
+}

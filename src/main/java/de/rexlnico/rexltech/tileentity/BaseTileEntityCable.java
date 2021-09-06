@@ -35,7 +35,7 @@ public class BaseTileEntityCable extends TileEntity {
 
     public BaseTileEntityCable(int transfer) {
         super(TileEntityInit.ENERGY_CABLE.get());
-        this.energyStorage = new CustomCableEnergyStorage(transfer, transfer) {
+        this.energyStorage = new CustomCableEnergyStorage(this, transfer, transfer) {
             @Override
             public int receiveEnergy(int maxReceive, boolean simulate) {
                 markDirty();
