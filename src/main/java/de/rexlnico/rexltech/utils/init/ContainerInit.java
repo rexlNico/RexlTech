@@ -1,9 +1,7 @@
 package de.rexlnico.rexltech.utils.init;
 
 import de.rexlnico.rexltech.RexlTech;
-import de.rexlnico.rexltech.container.CoalGeneratorContainer;
-import de.rexlnico.rexltech.container.CrusherContainer;
-import de.rexlnico.rexltech.container.LatexExtractorContainer;
+import de.rexlnico.rexltech.container.*;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -32,6 +30,18 @@ public class ContainerInit {
         BlockPos pos = data.readBlockPos();
         World world = inv.player.getEntityWorld();
         return new LatexExtractorContainer(windowId, world, pos, inv, inv.player);
+    })));
+
+    public static final RegistryObject<ContainerType<SmelterContainer>> SMELTER_CONTAINER = CONTAINERS.register("smelter", () -> IForgeContainerType.create(((windowId, inv, data) -> {
+        BlockPos pos = data.readBlockPos();
+        World world = inv.player.getEntityWorld();
+        return new SmelterContainer(windowId, world, pos, inv, inv.player);
+    })));
+
+    public static final RegistryObject<ContainerType<MinerContainer>> MINER_CONTAINER = CONTAINERS.register("miner", () -> IForgeContainerType.create(((windowId, inv, data) -> {
+        BlockPos pos = data.readBlockPos();
+        World world = inv.player.getEntityWorld();
+        return new MinerContainer(windowId, world, pos, inv, inv.player);
     })));
 
 }

@@ -3,13 +3,13 @@ package de.rexlnico.rexltech.client.rendering;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import de.rexlnico.rexltech.client.model.MinerModel;
-import de.rexlnico.rexltech.tileentity.TileEntityMiner;
+import de.rexlnico.rexltech.tileentity.TileEntityQuarry;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.util.ResourceLocation;
 
-public class MinerTileEntityRenderer extends TileEntityRenderer<TileEntityMiner> {
+public class MinerTileEntityRenderer extends TileEntityRenderer<TileEntityQuarry> {
 
     MinerModel minerModel = new MinerModel();
     ResourceLocation modelTexture = new ResourceLocation("");
@@ -19,7 +19,7 @@ public class MinerTileEntityRenderer extends TileEntityRenderer<TileEntityMiner>
     }
 
     @Override
-    public void render(TileEntityMiner tileEntity, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
+    public void render(TileEntityQuarry tileEntity, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
         matrixStack.push();
         boolean USE_ENTITY_MODEL_TRANSFORMATIONS = true;
 
@@ -38,7 +38,7 @@ public class MinerTileEntityRenderer extends TileEntityRenderer<TileEntityMiner>
     }
 
     @Override
-    public boolean isGlobalRenderer(TileEntityMiner te) {
+    public boolean isGlobalRenderer(TileEntityQuarry te) {
         return true;
     }
 }

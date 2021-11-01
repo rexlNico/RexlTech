@@ -19,7 +19,6 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -162,8 +161,8 @@ public abstract class BaseTileEntityMachineBlock extends BaseTileEntity {
 
     }
 
-    @Nullable
-    public abstract Item[] getAllowedAddons();
+    @Nonnull
+    public abstract BaseUpgradeItem[] getAllowedAddons();
 
     public List<Item> getAllowedAddonsList() {
         return Arrays.asList(getAllowedAddons());

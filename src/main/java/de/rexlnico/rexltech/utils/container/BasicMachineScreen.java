@@ -16,12 +16,8 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.util.text.Color;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
+import net.minecraft.util.text.*;
 import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +51,7 @@ public abstract class BasicMachineScreen<T extends BasicMachineContainer> extend
 
     @Override
     public void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y) {
-        drawString(matrixStack, Minecraft.getInstance().fontRenderer, title, (this.xSize / 2 - Minecraft.getInstance().fontRenderer.getStringWidth(title.getString()) / 2) - 5, 6, 0x404040);
+        drawString(matrixStack, Minecraft.getInstance().fontRenderer, title, (this.xSize / 2 - Minecraft.getInstance().fontRenderer.getStringWidth(title.getString()) / 2) - 5, 6, 0x808080);
     }
 
     public void setEnergyOffset(int x, int y) {
@@ -267,23 +263,21 @@ public abstract class BasicMachineScreen<T extends BasicMachineContainer> extend
         if (container.getTileEntity().getCapability(CapabilityEnergy.ENERGY).isPresent()) {
             if (mouseX >= relX + 153 && mouseX <= relX + 168) {
                 if (mouseY >= relY + 16 && mouseY <= relY + 75) {
-                    StringTextComponent textComponent = EnergyHelper.getEnergyStorageTextComponent(container.getEnergy(), container.getMaxEnergy());
-                    textComponent.setStyle(Style.EMPTY.setColor(Color.fromInt(4210752)));
-                    renderTooltip(matrixStack, textComponent, mouseX, mouseY);
+                    renderTooltip(matrixStack, getEnergyHover(), mouseX, mouseY);
                 }
             }
         }
     }
 
+    public TextComponent getEnergyHover() {
+        StringTextComponent textComponent = EnergyHelper.getEnergyStorageTextComponent(container.getEnergy(), container.getMaxEnergy());
+        textComponent.setStyle(Style.EMPTY.setColor(Color.fromInt(4210752)));
+        return textComponent;
+    }
+
     public int getEnergyStoredScaled(int pixels) {
         int i = ((BaseTileEntityMachineBlock) container.getTileEntity()).energyStorage.getEnergyStored();
         int j = ((BaseTileEntityMachineBlock) container.getTileEntity()).energyStorage.getMaxEnergyStored();
-        return i != 0 && j != 0 ? i * pixels / j : 0;
-    }
-
-    public int getTankScaled(int pixels, FluidTank tank) {
-        int i = tank.getFluidAmount();
-        int j = tank.getCapacity();
         return i != 0 && j != 0 ? i * pixels / j : 0;
     }
 

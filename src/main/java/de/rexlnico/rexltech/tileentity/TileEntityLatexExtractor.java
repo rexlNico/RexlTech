@@ -11,14 +11,20 @@ import de.rexlnico.rexltech.utils.tileentity.CustomFluidStorage;
 import de.rexlnico.rexltech.utils.tileentity.SideConfiguration;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.network.PacketDistributor;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.HashMap;
 
 public class TileEntityLatexExtractor extends BaseTileEntity {
@@ -26,13 +32,22 @@ public class TileEntityLatexExtractor extends BaseTileEntity {
     public static HashMap<DimensionType, HashMap<ChunkPos, HashMap<BlockPos, FluidExtractionProgress>>> EXTRACTION = new HashMap<>();
 
     private boolean active = false;
-    public CustomFluidStorage latexTank = new CustomFluidStorage(this, 8000);
+    public CustomFluidStorage latexTank = new CustomFluidStorage(this, 8000) {
+        @Override
+        public void sendTileUpdate() {
+            sendTankUpdate();
+        }
+    };
+    LazyOptional<IFluidHandler> lazyOptional = LazyOptional.of(() -> latexTank);
     private int workTime = 0;
 
     public TileEntityLatexExtractor() {
         super(TileEntityInit.LATEX_EXTRACTOR.get(), SideConfiguration.OUTPUT);
         latexTank.input = false;
-        sendTankUpdate();
+    }
+
+    public void sendTankUpdate() {
+        PacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(), new FluidTankUpdatePacket(pos, latexTank.getFluid()));
     }
 
     @Override
@@ -91,10 +106,6 @@ public class TileEntityLatexExtractor extends BaseTileEntity {
         sendTankUpdate();
     }
 
-    public void sendTankUpdate() {
-        PacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(), new FluidTankUpdatePacket(pos, latexTank.getFluid()));
-    }
-
     public BlockPos getBlockPosInFront() {
         return pos.offset(world.getBlockState(pos).get(BaseMachineBlock.FACING));
     }
@@ -130,5 +141,29 @@ public class TileEntityLatexExtractor extends BaseTileEntity {
             return breakID;
         }
 
+    }
+
+    @Nonnull
+    @Override
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap) {
+        if (cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) return lazyOptional.cast();
+        return super.getCapability(cap);
+    }
+
+    @Nonnull
+    @Override
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+        if (cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+            if (sideConfiguration[side.getIndex()].output) {
+                return lazyOptional.cast();
+            }
+        }
+        return super.getCapability(cap, side);
+    }
+
+    @Override
+    protected void invalidateCaps() {
+        super.invalidateCaps();
+        lazyOptional.invalidate();
     }
 }

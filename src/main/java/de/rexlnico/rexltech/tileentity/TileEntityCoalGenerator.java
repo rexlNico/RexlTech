@@ -2,6 +2,7 @@ package de.rexlnico.rexltech.tileentity;
 
 import de.rexlnico.rexltech.block.CoalGenerator;
 import de.rexlnico.rexltech.config.RexlTechGeneratorConfig;
+import de.rexlnico.rexltech.item.BaseUpgradeItem;
 import de.rexlnico.rexltech.utils.init.ItemInit;
 import de.rexlnico.rexltech.utils.init.TileEntityInit;
 import de.rexlnico.rexltech.utils.tileentity.SideConfiguration;
@@ -11,6 +12,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.AbstractFurnaceTileEntity;
 import net.minecraftforge.common.ForgeHooks;
+
+import javax.annotation.Nonnull;
 
 public class TileEntityCoalGenerator extends BaseTileEntityMachineBlock {
 
@@ -54,9 +57,10 @@ public class TileEntityCoalGenerator extends BaseTileEntityMachineBlock {
         }
     }
 
+    @Nonnull
     @Override
-    public Item[] getAllowedAddons() {
-        return new Item[]{ItemInit.ENERGY_PRODUCTION_UPGRADE.get()};
+    public BaseUpgradeItem[] getAllowedAddons() {
+        return new BaseUpgradeItem[]{ItemInit.ENERGY_PRODUCTION_UPGRADE.get()};
     }
 
     @Override

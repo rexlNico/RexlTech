@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
@@ -50,6 +51,36 @@ public class CustomItemStackHandler extends ItemStackHandler implements IInvento
         }
     }
 
+    public boolean hasSpaceInInventory(int space) {
+        return (int) getStack().stream().filter(stack -> stack == ItemStack.EMPTY).count() >= space;
+    }
+
+    public boolean canFitItemsInInventory(List<ItemStack> list) {
+        for (ItemStack stack : list) {
+            if (ItemHandlerHelper.insertItem(this, stack, true) != ItemStack.EMPTY) return false;
+        }
+        return true;
+    }
+
+    public boolean insertItemsInternal(List<ItemStack> list) {
+        for (ItemStack stack : list) {
+            insertItemInternal(stack, false);
+        }
+        return true;
+    }
+
+    public void insertItemInternal(ItemStack stack, boolean simulate) {
+        if (stack.isEmpty())
+            return;
+
+        for (int i = 0; i < getSlots(); i++) {
+            stack = insertItemInternal(i, stack, simulate);
+            if (stack.isEmpty()) {
+                return;
+            }
+        }
+    }
+
     public void addAllowedItems(int slot, List<Item> allowedItems) {
         if (!this.allowedItems.containsKey(slot)) this.allowedItems.put(slot, new ArrayList<>());
         this.allowedItems.get(slot).addAll(allowedItems);
@@ -77,7 +108,7 @@ public class CustomItemStackHandler extends ItemStackHandler implements IInvento
 
     @Override
     public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-        return allowedItems.get(slot).contains(stack.getItem());
+        return allowedItems.get(slot).contains(stack.getItem()) || allowedItems.get(slot).isEmpty();
     }
 
     @Override
@@ -87,6 +118,16 @@ public class CustomItemStackHandler extends ItemStackHandler implements IInvento
         if (!allowedItems.get(slot).contains(stack.getItem())) return stack;
         if (!baseTileEntityMachineBlock.sideConfiguration[direction.ordinal()].input) return stack;
         return super.insertItem(slot, stack, simulate);
+    }
+
+    public ItemStack insertItemInternal(int slot, ItemStack stack, boolean simulate) {
+        ArrayList<Item> old = allowedItems.get(slot);
+        allowedItems.remove(slot);
+        allowedItems.put(slot, new ArrayList<>(Collections.singletonList(stack.getItem())));
+        ItemStack back = super.insertItem(slot, stack, simulate);
+        allowedItems.remove(slot);
+        allowedItems.put(slot, old);
+        return back;
     }
 
     @Override

@@ -82,7 +82,7 @@ public class CoalGeneratorContainer extends BasicMachineContainer {
         return isWithinUsableDistance(IWorldPosCallable.of(tileEntity.getWorld(), tileEntity.getPos()), playerEntity, BlockInit.COAL_GENERATOR.get());
     }
 
-    public TileEntityCoalGenerator getTileEntity(){
+    public TileEntityCoalGenerator getTileEntity() {
         return (TileEntityCoalGenerator) tileEntity;
     }
 

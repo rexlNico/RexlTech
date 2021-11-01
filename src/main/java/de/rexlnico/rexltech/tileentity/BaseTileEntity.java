@@ -51,6 +51,7 @@ public abstract class BaseTileEntity extends TileEntity implements ITickableTile
     }
 
     public abstract void setTanksStack(int id, FluidStack stack);
+    
 
     @Override
     public CompoundNBT write(CompoundNBT compound) {

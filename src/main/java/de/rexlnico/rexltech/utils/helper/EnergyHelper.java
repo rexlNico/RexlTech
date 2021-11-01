@@ -4,14 +4,14 @@ import net.minecraft.util.text.StringTextComponent;
 
 public class EnergyHelper {
 
-    public static String getEnergyString(int number) {
+    public static String getEnergyString(float number) {
 
         if (number >= 1000000000) {
-            return number / 1000000000 + "G FE";
+            return Math.round(number / 100000000F) / 10F + "G FE";
         } else if (number >= 1000000) {
-            return number / 1000000 + "M FE";
+            return Math.round(number / 100000F) / 10F + "M FE";
         } else if (number >= 1000) {
-            return number / 1000 + "k FE";
+            return Math.round(number / 100F) / 10F + "k FE";
         } else {
             return number + " FE";
         }
@@ -31,6 +31,10 @@ public class EnergyHelper {
 
     public static String getFluidStorageString(int storage, int maxStorage) {
         return getFluidString(storage) + " / " + getFluidString(maxStorage);
+    }
+
+    public static StringTextComponent getEnergyUsageTextComponent(int usage) {
+        return new StringTextComponent(getEnergyString(usage) + "/tick");
     }
 
     public static StringTextComponent getEnergyStorageTextComponent(int storage, int maxStorage) {

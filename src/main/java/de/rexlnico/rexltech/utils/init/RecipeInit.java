@@ -3,6 +3,7 @@ package de.rexlnico.rexltech.utils.init;
 import de.rexlnico.rexltech.RexlTech;
 import de.rexlnico.rexltech.item.recipe.CrusherRecipe;
 import de.rexlnico.rexltech.item.recipe.LatexExtractorRecipe;
+import de.rexlnico.rexltech.item.recipe.SmelterRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraftforge.fml.RegistryObject;
@@ -18,4 +19,7 @@ public class RecipeInit {
 
     public static final IRecipeType<LatexExtractorRecipe> LATEX_EXTRACTOR_TYPE = IRecipeType.register(RexlTech.MODID + "latex_extractor");
     public static final RegistryObject<IRecipeSerializer<?>> LATEX_EXTRACTOR_SERIALIZER = RECIPE_SERIALIZER.register("latex_extractor", LatexExtractorRecipe.Serializer::new);
+
+    public static final IRecipeType<SmelterRecipe> SMELTER_TYPE = IRecipeType.register(RexlTech.MODID + "smelting");
+    public static final RegistryObject<IRecipeSerializer<?>> SMELTER_SERIALIZER = RECIPE_SERIALIZER.register("smelting", SmelterRecipe.Serializer::new);
 }

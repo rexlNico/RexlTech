@@ -1,168 +1,187 @@
 package de.rexlnico.rexltech.tileentity;
 
-import com.mojang.authlib.GameProfile;
-import de.rexlnico.rexltech.utils.handler.ItemCaptureHandler;
-import de.rexlnico.rexltech.utils.helper.FakePlayer;
+import de.rexlnico.rexltech.block.BaseMachineBlock;
+import de.rexlnico.rexltech.item.BaseUpgradeItem;
 import de.rexlnico.rexltech.utils.init.ItemInit;
 import de.rexlnico.rexltech.utils.init.TileEntityInit;
-import de.rexlnico.rexltech.utils.tileentity.CustomEnergyStorage;
-import de.rexlnico.rexltech.utils.tileentity.CustomItemStackUpgradesHandler;
+import de.rexlnico.rexltech.utils.tileentity.SideConfiguration;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.block.Blocks;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootParameters;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
-public class TileEntityMiner extends TileEntity implements ITickableTileEntity {
+public class TileEntityMiner extends BaseTileEntityMachineBlock {
 
-    private final static ItemStack genericDigger = new ItemStack(Items.DIAMOND_PICKAXE, 1);
-    private ItemStack diggerTool;
+    private final static ItemStack TOOL = new ItemStack(Items.NETHERITE_PICKAXE);
 
-    public List<TileEntityItemOutput> outputs = new ArrayList<>();
-    public boolean formed = false;
-    public CustomItemStackUpgradesHandler itemStackHandler = new CustomItemStackUpgradesHandler(this, 4, ItemInit.SPEED_UPGRADE.get(), ItemInit.CREATIVE_ENERGY_UPGRADE.get());
-    public ArrayList<ItemStack> extraStacksHandler = new ArrayList<>();
-    private LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(() -> itemStackHandler);
-    public CustomEnergyStorage energyStorage = new CustomEnergyStorage(this, 10000000, 2500000, 0);
-    private LazyOptional<IEnergyStorage> lazyOptionalEnergy = LazyOptional.of(() -> energyStorage);
-    private int progress = 0;
-    private int maxProgress = 200;
-    private GameProfile owner = null;
-    private FakePlayer fakePlayer;
+    public BlockPos miningPos;
+    public int cooldown;
+    public static final int basEnergyUsageBreak = 50;
+    public static final int basEnergyUsageMove = 20;
+    public static final int baseEnergyIdle = 5;
 
     public TileEntityMiner() {
-        super(TileEntityInit.MINER_BLOCK.get());
+        super(TileEntityInit.MINER.get(), 18, new Integer[]{}, new Integer[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17}, new SideConfiguration[]{SideConfiguration.OUTPUT}, 2500000, 250000, 0);
     }
 
-    public void setOwner(GameProfile gameProfile) {
-        owner = gameProfile;
+    @Override
+    public void setWorldAndPos(World world, BlockPos pos) {
+        super.setWorldAndPos(world, pos);
+        if (miningPos == null)
+            miningPos = Objects.requireNonNull(world).getChunk(pos).getPos().asBlockPos().add(0, pos.getY(), 0);
     }
 
-    public boolean operate() {
-        if (!extraStacksHandler.isEmpty()) {
-            List<ItemStack> remove = new ArrayList<>();
-            for (ItemStack stack : extraStacksHandler) {
-                if (sendItemToOutput(stack)) {
-                    remove.add(stack);
+    @Override
+    public void onTick() {
+        if (miningPos == null || isFinished()) return;
+        if (energyStorage.getEnergyStored() != energyStorage.getMaxEnergyStored() && getEnergy(basEnergyUsageBreak) == 0 && getEnergy(basEnergyUsageMove) == 0 && getEnergy(baseEnergyIdle) == 0) {
+            energyStorage.setEnergy(energyStorage.getMaxEnergyStored());
+        }
+        if (cooldown > 0) {
+            if (energyStorage.getEnergyStored() > getEnergy(baseEnergyIdle)) {
+                cooldown -= getTicks(1);
+                energyStorage.extractEnergyInternal(getEnergy(baseEnergyIdle), false);
+            }
+        } else {
+            if (Objects.requireNonNull(world).getBlockState(miningPos).getBlock() == Blocks.AIR) {
+                if (energyStorage.getEnergyStored() > getEnergy(basEnergyUsageMove)) {
+                    energyStorage.extractEnergyInternal(getEnergy(basEnergyUsageMove), false);
+                    setNewPosition();
+                    cooldown += 2;
+                }
+            } else if (world.getBlockState(miningPos).getBlock().getTags().contains(Tags.Blocks.ORES.getName())) {
+                if (energyStorage.getEnergyStored() > getEnergy(basEnergyUsageBreak)) {
+                    List<ItemStack> blockLoot = getBlockLoot(miningPos);
+                    if (handler.canFitItemsInInventory(blockLoot)) {
+                        energyStorage.extractEnergyInternal(getEnergy(basEnergyUsageBreak), false);
+                        handler.insertItemsInternal(blockLoot);
+                        breakBlock(miningPos);
+                        setNewPosition();
+                        cooldown += 10;
+                    }
+                }
+            } else {
+                if (energyStorage.getEnergyStored() > getEnergy(basEnergyUsageMove)) {
+                    energyStorage.extractEnergyInternal(getEnergy(basEnergyUsageMove), false);
+                    setNewPosition();
+                    cooldown += 5;
                 }
             }
-            extraStacksHandler.removeAll(remove);
-            return false;
         }
-        if (owner == null) return false;
-        boolean success = false;
-        Direction side = Direction.NORTH;
-        BlockPos offset = getPos().offset(side);
-        World world = this.world;
-        TileEntity tileEntity = world.getTileEntity(offset);
-        if (world.isAirBlock(offset)) return false;
-        if (fakePlayer == null) {
-            fakePlayer = new FakePlayer((ServerWorld) world, owner, "miner");
-        }
-        if (diggerTool == null) {
-            diggerTool = genericDigger.copy();
-            //Apply enchantments from upgrades
-        }
-
-        BlockState blockState = world.getBlockState(offset);
-        if (blockState.getMaterial().isLiquid()) return false;
-        float hardness = blockState.getPlayerRelativeBlockHardness(fakePlayer, world, offset);
-        if (hardness == 0) return false;
-
-        fakePlayer.setHeldItem(Hand.MAIN_HAND, diggerTool.copy());
-        fakePlayer.setLocationEdge(offset, side);
-        ItemCaptureHandler.startCapturing();
-        success = fakePlayer.interactionManager.tryHarvestBlock(offset);
-        LinkedList<ItemStack> stacks = ItemCaptureHandler.stopCapturing();
-        for (ItemStack stack : stacks) {
-            if (!sendItemToOutput(stack)) {
-                extraStacksHandler.add(stack);
-            }
-        }
-        fakePlayer.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
-        PlayerInventory inventory = fakePlayer.inventory;
-        for (int i = 0; i < inventory.getSizeInventory(); i++) {
-            ItemStack stack = inventory.getStackInSlot(i);
-            if (stack != ItemStack.EMPTY && stack.getCount() > 0)
-                if (!sendItemToOutput(stack)) {
-                    extraStacksHandler.add(stack);
-                }
-        }
-
-        fakePlayer.clearInventory();
-        return true;
     }
 
-    public boolean sendItemToOutput(ItemStack stack) {
+    public int getFortuneLevel() {
+        int luck = 0;
+        for (int i = handler.getSlots() - 4; i < handler.getSlots(); i++) {
+            if (!handler.getStackInSlot(i).isEmpty() && handler.getStackInSlot(i).getItem() == ItemInit.LUCK_UPGRADE.get()) {
+                luck += 1;
+            }
+        }
+        return Math.min(3, luck);
+    }
 
+    public boolean hasSilkTouch() {
+        for (int i = handler.getSlots() - 4; i < handler.getSlots(); i++) {
+            if (!handler.getStackInSlot(i).isEmpty() && handler.getStackInSlot(i).getItem() == ItemInit.SILK_TOUCH_UPGRADE.get()) {
+                return true;
+            }
+        }
         return false;
     }
 
-    @Override
-    public void tick() {
-        if (world.isRemote) return;
-
+    public int getMiningHeight() {
+        return miningPos.getY();
     }
 
-    @Nonnull
-    @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        if (cap == CapabilityEnergy.ENERGY) return lazyOptionalEnergy.cast();
-        return super.getCapability(cap, side);
-    }
-
-    @Nonnull
-    @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap) {
-        if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) return lazyOptional.cast();
-        if (cap == CapabilityEnergy.ENERGY) return lazyOptionalEnergy.cast();
-        return super.getCapability(cap);
+    public void setMiningHeight(int height) {
+        miningPos = new BlockPos(miningPos.getX(), height, miningPos.getZ());
     }
 
     @Override
     public CompoundNBT write(CompoundNBT compound) {
-        compound.putBoolean("Formed", formed);
-        if (!outputs.isEmpty() && formed) {
-            compound.put("Outputs", outputs.stream().map(tileEntity -> NBTUtil.writeBlockPos(tileEntity.getPos())).collect(Collectors.toCollection(ListNBT::new)));
-        }
-        compound.put("Inventory", itemStackHandler.serializeNBT());
-        compound.put("Energy", energyStorage.serializeNBT());
-        compound.putInt("Progress", progress);
+        CompoundNBT posCompound = new CompoundNBT();
+        posCompound.putInt("x", miningPos.getX());
+        posCompound.putInt("y", miningPos.getY());
+        posCompound.putInt("z", miningPos.getZ());
+        compound.put("miningPos", posCompound);
         return super.write(compound);
+    }
+
+    public ItemStack getTool() {
+        ItemStack copy = TOOL.copy();
+        int fortune = getFortuneLevel();
+        boolean silkTouch = hasSilkTouch();
+        if (fortune > 0 && !silkTouch) {
+            copy.addEnchantment(Enchantments.FORTUNE, fortune);
+        } else if (silkTouch) {
+            copy.addEnchantment(Enchantments.SILK_TOUCH, 1);
+        }
+        return copy;
     }
 
     @Override
     public void read(BlockState state, CompoundNBT nbt) {
-        formed = nbt.getBoolean("Formed");
-        if (nbt.contains("Outputs") && formed)
-            nbt.getList("Outputs", Constants.NBT.TAG_COMPOUND).forEach(inbt -> outputs.add((TileEntityItemOutput) world.getTileEntity(NBTUtil.readBlockPos((CompoundNBT) inbt))));
-        itemStackHandler.deserializeNBT(nbt.getCompound("Inventory"));
-        energyStorage.deserializeNBT(nbt.getCompound("Energy"));
-        progress = nbt.getInt("Progress");
+        CompoundNBT posCompound = nbt.getCompound("miningPos");
+        miningPos = new BlockPos(posCompound.getInt("x"), posCompound.getInt("y"), posCompound.getInt("z"));
         super.read(state, nbt);
+    }
+
+    public List<ItemStack> getBlockLoot(BlockPos pos) {
+        if (!Objects.requireNonNull(world).isRemote) {
+            return world.getBlockState(pos).getDrops(new LootContext.Builder((ServerWorld) world).withRandom(world.getRandom()).withParameter(LootParameters.ORIGIN, Vector3d.ZERO).withParameter(LootParameters.TOOL, getTool()));
+        }
+        return new ArrayList<>();
+    }
+
+    public void breakBlock(BlockPos pos) {
+        if (!Objects.requireNonNull(world).isRemote) {
+            world.setBlockState(pos, Blocks.AIR.getDefaultState());
+        }
+    }
+
+    public void setNewPosition() {
+        BlockPos end = Objects.requireNonNull(world).getChunk(pos).getPos().asBlockPos().add(16, 0, 16);
+        if (miningPos != end) {
+            if (miningPos.getX() < end.getX()) {
+                miningPos = miningPos.add(1, 0, 0);
+            } else {
+                if (miningPos.getZ() < end.getZ()) {
+                    miningPos = miningPos.add(-16, 0, 1);
+                } else {
+                    miningPos = miningPos.add(-16, -1, -16);
+                }
+            }
+        }
+    }
+
+    public boolean isFinished() {
+        return miningPos == Objects.requireNonNull(world).getChunk(pos).getPos().asBlockPos().add(16, 0, 16);
+    }
+
+    @Nonnull
+    @Override
+    public BaseUpgradeItem[] getAllowedAddons() {
+        return new BaseUpgradeItem[]{ItemInit.SPEED_UPGRADE.get(), ItemInit.CREATIVE_ENERGY_UPGRADE.get(), ItemInit.LUCK_UPGRADE.get(), ItemInit.SILK_TOUCH_UPGRADE.get()};
+    }
+
+    @Override
+    public int getLightValue() {
+        BlockState blockState = Objects.requireNonNull(world).getBlockState(pos);
+        return blockState.get(BaseMachineBlock.BURNING) ? 3 : 0;
     }
 
 }

@@ -22,12 +22,17 @@ public class BlockInit {
     public static final RegistryObject<Block> COAL_GENERATOR = BLOCKS.register("coal_generator", CoalGenerator::new);
     public static final RegistryObject<Block> BASIC_ENERGY_CELL = BLOCKS.register("basic_energy_cell", BasicEnergyCell::new);
     public static final RegistryObject<Block> CRUSHER = BLOCKS.register("crusher", Crusher::new);
+    public static final RegistryObject<Block> SMELTER = BLOCKS.register("smelter", Smelter::new);
     public static final RegistryObject<Block> LATEX_EXTRACTOR = BLOCKS.register("latex_extractor", LatexExtractor::new);
+    public static final RegistryObject<Block> MINER = BLOCKS.register("miner", Miner::new);
     public static final RegistryObject<Block> ITEM_OUTPUT = BLOCKS.register("item_output", ItemOutputBlock::new);
-    public static final RegistryObject<Block> MINER_BLOCK = BLOCKS.register("miner_block", MinerBlock::new);
+    public static final RegistryObject<Block> QUARRY_BLOCK = BLOCKS.register("quarry_block", QuarryBlock::new);
 
     //Cables
     public static final RegistryObject<Block> BASIC_ENERGY_CABLE = BLOCKS.register("basic_energy_cable", BasicEnergyCable::new);
+
+    //Fluid Pipes
+    public static final RegistryObject<Block> BASIC_FLUID_PIPE = BLOCKS.register("basic_fluid_pipe", BasicFluidPipe::new);
 
     //Rubber Tree
     public static final RegistryObject<Block> RUBBER_LEAVES = BLOCKS.register("rubber_leaves", () -> new LeavesBlock(AbstractBlock.Properties.from(Blocks.OAK_LEAVES).tickRandomly().notSolid()));

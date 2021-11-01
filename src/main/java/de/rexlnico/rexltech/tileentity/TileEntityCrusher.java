@@ -1,6 +1,7 @@
 package de.rexlnico.rexltech.tileentity;
 
 import de.rexlnico.rexltech.block.Crusher;
+import de.rexlnico.rexltech.item.BaseUpgradeItem;
 import de.rexlnico.rexltech.item.recipe.CrusherRecipe;
 import de.rexlnico.rexltech.utils.init.ItemInit;
 import de.rexlnico.rexltech.utils.init.RecipeInit;
@@ -8,13 +9,12 @@ import de.rexlnico.rexltech.utils.init.SoundInit;
 import de.rexlnico.rexltech.utils.init.TileEntityInit;
 import de.rexlnico.rexltech.utils.tileentity.SideConfiguration;
 import net.minecraft.block.BlockState;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 
 public class TileEntityCrusher extends BaseTileEntityMachineBlock {
 
@@ -137,10 +137,10 @@ public class TileEntityCrusher extends BaseTileEntityMachineBlock {
         return ItemStack.EMPTY;
     }
 
-    @Nullable
+    @Nonnull
     @Override
-    public Item[] getAllowedAddons() {
-        return new Item[]{ItemInit.SPEED_UPGRADE.get(), ItemInit.CREATIVE_ENERGY_UPGRADE.get()};
+    public BaseUpgradeItem[] getAllowedAddons() {
+        return new BaseUpgradeItem[]{ItemInit.SPEED_UPGRADE.get(), ItemInit.CREATIVE_ENERGY_UPGRADE.get()};
     }
 
     @Override

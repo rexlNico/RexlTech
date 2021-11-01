@@ -29,10 +29,15 @@ public class ItemInit {
     public static final RegistryObject<BlockItem> COAL_GENERATOR = ITEMS.register("coal_generator", () -> new BlockItem(BlockInit.COAL_GENERATOR.get(), new Item.Properties().group(MachineGroup.MACHINEGROUP)));
     public static final RegistryObject<BlockItem> BASIC_ENERGY_CELL = ITEMS.register("basic_energy_cell", () -> new BaseEnergyCellBlockItem(BlockInit.BASIC_ENERGY_CELL.get(), new Item.Properties().group(MachineGroup.MACHINEGROUP)));
     public static final RegistryObject<BlockItem> CRUSHER = ITEMS.register("crusher", () -> new BlockItem(BlockInit.CRUSHER.get(), new Item.Properties().group(MachineGroup.MACHINEGROUP)));
+    public static final RegistryObject<BlockItem> SMELTER = ITEMS.register("smelter", () -> new BlockItem(BlockInit.SMELTER.get(), new Item.Properties().group(MachineGroup.MACHINEGROUP)));
     public static final RegistryObject<BlockItem> LATEX_EXTRACTOR = ITEMS.register("latex_extractor", () -> new BlockItem(BlockInit.LATEX_EXTRACTOR.get(), new Item.Properties().group(MachineGroup.MACHINEGROUP)));
+    public static final RegistryObject<BlockItem> MINER = ITEMS.register("miner", () -> new BlockItem(BlockInit.MINER.get(), new Item.Properties().group(MachineGroup.MACHINEGROUP)));
 
     //Cables
     public static final RegistryObject<BlockItem> BASIC_ENERGY_CABLE = ITEMS.register("basic_energy_cable", () -> new BlockItem(BlockInit.BASIC_ENERGY_CABLE.get(), new Item.Properties().group(MachineGroup.MACHINEGROUP)));
+
+    //Fluid Pipes
+    public static final RegistryObject<BlockItem> BASIC_FLUID_PIPE = ITEMS.register("basic_fluid_pipe", () -> new BlockItem(BlockInit.BASIC_FLUID_PIPE.get(), new Item.Properties().group(MachineGroup.MACHINEGROUP)));
 
     //Rubber Tree
     public static final RegistryObject<BlockItem> RUBBER_WOOD = ITEMS.register("rubber_wood", () -> new BlockItem(BlockInit.RUBBER_WOOD.get(), new Item.Properties().group(ItemGroup.DECORATIONS)));
@@ -52,7 +57,9 @@ public class ItemInit {
     public static final RegistryObject<Item> JETPACK = ITEMS.register("jetpack", Jetpack::new);
 
     //Updates
-    public static final RegistryObject<Item> SPEED_UPGRADE = ITEMS.register("speed_upgrade", SpeedUpgrade::new);
-    public static final RegistryObject<Item> ENERGY_PRODUCTION_UPGRADE = ITEMS.register("energy_production_upgrade", EnergyProductionUpgrade::new);
-    public static final RegistryObject<Item> CREATIVE_ENERGY_UPGRADE = ITEMS.register("creative_energy_upgrade", CreativeEnergyUpgrade::new);
+    public static final RegistryObject<BaseUpgradeItem> SPEED_UPGRADE = ITEMS.register("speed_upgrade", SpeedUpgrade::new);
+    public static final RegistryObject<BaseUpgradeItem> LUCK_UPGRADE = ITEMS.register("luck_upgrade", LuckUpgrade::new);
+    public static final RegistryObject<BaseUpgradeItem> SILK_TOUCH_UPGRADE = ITEMS.register("silk_touch_upgrade", SilkTouchUpgrade::new);
+    public static final RegistryObject<BaseUpgradeItem> ENERGY_PRODUCTION_UPGRADE = ITEMS.register("energy_production_upgrade", EnergyProductionUpgrade::new);
+    public static final RegistryObject<BaseUpgradeItem> CREATIVE_ENERGY_UPGRADE = ITEMS.register("creative_energy_upgrade", CreativeEnergyUpgrade::new);
 }

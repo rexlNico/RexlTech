@@ -29,6 +29,7 @@ public class CustomFluidStorage extends FluidTank {
         if (getFluid() != FluidStack.EMPTY) {
             fluid = new FluidStack(fluid.getFluid(), amount);
             tile.markDirty();
+            sendTileUpdate();
         }
     }
 
@@ -39,14 +40,19 @@ public class CustomFluidStorage extends FluidTank {
         return super.isFluidValid(stack);
     }
 
+    public void sendTileUpdate() {
+    }
+
     public int fillForced(FluidStack resource, FluidAction action) {
         tile.markDirty();
+        sendTileUpdate();
         return super.fill(resource, action);
     }
 
     @Override
     public int fill(FluidStack resource, FluidAction action) {
         tile.markDirty();
+        sendTileUpdate();
         return input ? super.fill(resource, action) : 0;
     }
 
@@ -54,6 +60,7 @@ public class CustomFluidStorage extends FluidTank {
     @Override
     public FluidStack drain(int maxDrain, FluidAction action) {
         tile.markDirty();
+        sendTileUpdate();
         return output ? super.drain(maxDrain, action) : FluidStack.EMPTY;
     }
 
@@ -61,12 +68,14 @@ public class CustomFluidStorage extends FluidTank {
     @Override
     public FluidStack drain(FluidStack resource, FluidAction action) {
         tile.markDirty();
+        sendTileUpdate();
         return output ? super.drain(resource, action) : FluidStack.EMPTY;
     }
 
     @Override
     protected void onContentsChanged() {
         tile.markDirty();
+        sendTileUpdate();
         super.onContentsChanged();
     }
 }
